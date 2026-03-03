@@ -1,21 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --surface: #f9fafb;
-  --surface-strong: #f3f4f6;
-  --foreground: #111827;
-  --muted: #4b5563;
-  --muted-2: #6b7280;
-  --accent: #8b5cf6;
-  --primary: #4f46e5;
-  --secondary: #6b7280;
-  --border: #e5e7eb;
-  --border-strong: #d1d5db;
-  --nav-bg: rgba(255, 255, 255, 0.8);
-  --nav-bubble: #e1e1e3;
-  --nav-text: #4b5563;
-  --nav-text-hover: #111827;
+  --background: #000000;
+  --surface: #222222;
+  --surface-strong: #818cf8;
+  --foreground: #f9fafb;
+  --muted: #d1d5db;
+  --muted-2: #9ca3af;
+  --accent: #a78bfa;
+  --primary: #818cf8;
+  --secondary: #9ca3af;
+  --border: #374151;
+  --border-strong: #4b5563;
+  --nav-bg: rgba(0, 0, 0, 0.8);
+  --nav-bubble: #222222;
+  --nav-text: #9ca3af;
+  --nav-text-hover: #f9fafb;
 }
 
 @theme inline {
@@ -55,4 +55,18 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), sans-serif;
+}
+
+/* .container-width {
+  width: min(100% - 2rem, 920px);
+  margin-inline: auto;
+} */
+
+.container-width {
+    @apply max-w-2xl mx-auto px-4 sm:px-6;
+  }
+
+.section {
+  padding-top: 3rem;
+  padding-bottom: 4rem;
 }
