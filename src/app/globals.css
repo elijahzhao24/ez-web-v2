@@ -2,25 +2,57 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --surface: #f9fafb;
+  --surface-strong: #f3f4f6;
+  --foreground: #111827;
+  --muted: #4b5563;
+  --muted-2: #6b7280;
+  --accent: #8b5cf6;
+  --primary: #4f46e5;
+  --secondary: #6b7280;
+  --border: #e5e7eb;
+  --border-strong: #d1d5db;
+  --nav-bg: rgba(255, 255, 255, 0.8);
+  --nav-bubble: #e1e1e3;
+  --nav-text: #4b5563;
+  --nav-text-hover: #111827;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-strong: var(--surface-strong);
+  --color-muted: var(--muted);
+  --color-muted-2: var(--muted-2);
+  --color-accent: var(--accent);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-nav-bg: var(--nav-bg);
+  --color-nav-bubble: var(--nav-bubble);
+  --color-nav-text: var(--nav-text);
+  --color-nav-text-hover: var(--nav-text-hover);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+html,
+body {
+  min-height: 100%;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), sans-serif;
 }
