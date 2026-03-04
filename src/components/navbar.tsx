@@ -9,8 +9,8 @@ import { useTheme } from "@/context/themeProvider";
 
 const navItems = [
   { path: "/", label: "Home" },
+  { path: "/work", label: "Work" },
   { path: "/about", label: "About" },
-  { path: "/gear", label: "Gear" },
   { path: "/contact", label: "Contact" },
 ];
 
