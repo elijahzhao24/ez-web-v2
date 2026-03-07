@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
 :root {
@@ -34,7 +35,7 @@
   --color-nav-bubble: var(--nav-bubble);
   --color-nav-text: var(--nav-text);
   --color-nav-text-hover: var(--nav-text-hover);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
@@ -46,27 +47,81 @@ html.dark {
   color-scheme: dark;
 }
 
-html,
-body {
-  min-height: 100%;
+@layer base {
+  html {
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+  }
+
+  html,
+  body {
+    min-height: 100%;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    @apply antialiased text-sm text-muted dark:text-gray-300;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-foreground font-medium tracking-tight;
+  }
+
+  h1 {
+    @apply text-2xl sm:text-3xl;
+  }
+
+  h2 {
+    @apply text-lg sm:text-xl;
+  }
+
+  p {
+    @apply text-sm leading-relaxed;
+  }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), sans-serif;
-}
-
-/* .container-width {
-  width: min(100% - 2rem, 920px);
-  margin-inline: auto;
-} */
-
-.container-width {
+@layer components {
+  .container-width {
     @apply max-w-2xl mx-auto px-4 sm:px-6;
   }
 
-.section {
-  padding-top: 3rem;
-  padding-bottom: 4rem;
+  .section {
+    @apply py-6 sm:py-8;
+  }
+
+  .card {
+    @apply transition-all duration-200;
+  }
+}
+
+@layer utilities {
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
 }
