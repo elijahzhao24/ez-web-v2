@@ -2,7 +2,9 @@
 
 import { motion } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
+import FeaturedCarousel from "@/components/featured_carousel";
 import ImageCarousel from "@/components/image_carousel";
+import { FadeInSection } from "@/util/FadeInSection";
 
 export default function Home() {
   return (
@@ -12,7 +14,7 @@ export default function Home() {
           className="text-2xl sm:text-3xl font-medium"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.4 }}
         >
           <TypeAnimation
             sequence={["hello, Elijah here"]}
@@ -29,12 +31,18 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 1.2 }}
         >
-          Developer by profession, vibe coder by passion. Nice to meet you or
-          welcome back! Here's what I've been up too.
+          Vibe coder by profession, developer by passion. I like building things that make a dent in the world.
         </motion.p>
       </section>
 
-      <ImageCarousel />
+      <FadeInSection delay={1.2}>
+        <motion.section className="space-y-1">
+          <ImageCarousel />
+          <div className="w-full max-w-[95%] mx-auto">
+            <FeaturedCarousel />
+          </div>
+        </motion.section>
+      </FadeInSection>
     </main>
   );
 }

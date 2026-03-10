@@ -12,7 +12,7 @@ type Slide = {
   description: string;
 };
 
-const AUTO_ROTATE_MS = 5000;
+const AUTO_ROTATE_MS = 6500;
 const TICK_MS = 50;
 
 export default function ImageCarousel() {
@@ -27,22 +27,32 @@ export default function ImageCarousel() {
     [],
   );
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [progress, setProgress] = useState(0);
+  const [carouselState, setCarouselState] = useState({
+    currentIndex: 0,
+    progress: 0,
+  });
   const [isPausedByUser, setIsPausedByUser] = useState(false);
   const [isTabHidden, setIsTabHidden] = useState(false);
 
+  const { currentIndex, progress } = carouselState;
   const shouldPause = isPausedByUser || isTabHidden;
   const activeSlide = slides[currentIndex];
 
-  const goToIndex = (index: number) => {
-    const nextIndex = (index + slides.length) % slides.length;
-    setCurrentIndex(nextIndex);
-    setProgress(0);
+  const goToIndex = (index: number | ((currentIndex: number) => number)) => {
+    setCarouselState((prev) => {
+      const resolvedIndex =
+        typeof index === "function" ? index(prev.currentIndex) : index;
+      const nextIndex = (resolvedIndex + slides.length) % slides.length;
+
+      return {
+        currentIndex: nextIndex,
+        progress: 0,
+      };
+    });
   };
 
-  const goToNext = () => goToIndex(currentIndex + 1);
-  const goToPrevious = () => goToIndex(currentIndex - 1);
+  const goToNext = () => goToIndex((index) => index + 1);
+  const goToPrevious = () => goToIndex((index) => index - 1);
 
   useEffect(() => {
     const onVisibilityChange = () => {
@@ -63,15 +73,20 @@ export default function ImageCarousel() {
     }
 
     const interval = setInterval(() => {
-      setProgress((prevProgress) => {
-        const nextProgress = prevProgress + TICK_MS / AUTO_ROTATE_MS;
+      setCarouselState((prev) => {
+        const nextProgress = prev.progress + TICK_MS / AUTO_ROTATE_MS;
 
         if (nextProgress >= 1) {
-          setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-          return 0;
+          return {
+            currentIndex: (prev.currentIndex + 1) % slides.length,
+            progress: 0,
+          };
         }
 
-        return nextProgress;
+        return {
+          ...prev,
+          progress: nextProgress,
+        };
       });
     }, TICK_MS);
 
@@ -80,7 +95,7 @@ export default function ImageCarousel() {
 
   return (
     <section className="w-full">
-    <h2 className="text-lg font-semibold">Here's what I've been up to</h2>
+      <h2 className="text-lg font-semibold">Here's what I've been up to</h2>
       <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-black">
         {slides.map((slide, index) => (
           <Image
