@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
 import FeaturedCarousel from "@/components/featured_carousel";
 import ImageCarousel from "@/components/image_carousel";
+import SpotifyPlaying from "@/components/spotify_playing";
 import { FadeInSection } from "@/util/FadeInSection";
 
 export default function Home() {
@@ -31,7 +32,8 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 1.2 }}
         >
-          Vibe coder by profession, developer by passion. I like building things that make a dent in the world.
+          Vibe coder by profession, developer by passion. I like building things
+          that make a dent in the world.
         </motion.p>
       </section>
 
@@ -41,6 +43,12 @@ export default function Home() {
           <div className="w-full max-w-[95%] mx-auto">
             <FeaturedCarousel />
           </div>
+        </motion.section>
+      </FadeInSection>
+
+      <FadeInSection delay={0.4}>
+        <motion.section className="mt-4">
+          <SpotifyPlaying />
         </motion.section>
       </FadeInSection>
     </main>
