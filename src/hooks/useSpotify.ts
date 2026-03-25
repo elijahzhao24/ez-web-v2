@@ -51,6 +51,22 @@ interface SpotifyTopTracksResponse {
   items: SpotifyTrack[];
 }
 
+class SpotifyApiError extends Error {
+  status: number;
+  details?: string;
+
+  constructor(status: number, details?: string) {
+    super(
+      details
+        ? `Spotify request failed (${status}): ${details}`
+        : `Spotify request failed (${status})`,
+    );
+    this.name = "SpotifyApiError";
+    this.status = status;
+    this.details = details;
+  }
+}
+
 function toTrack(track: SpotifyTrack): Track {
   return {
     id: track.id,
@@ -80,7 +96,21 @@ async function spotifyFetch<T>(
   }
 
   if (!response.ok) {
-    throw new Error(`Spotify request failed (${response.status})`);
+    let details: string | undefined;
+    try {
+      const payload = (await response.json()) as
+        | { error?: { message?: string } | string }
+        | undefined;
+      if (typeof payload?.error === "string") {
+        details = payload.error;
+      } else if (typeof payload?.error?.message === "string") {
+        details = payload.error.message;
+      }
+    } catch {
+      details = undefined;
+    }
+
+    throw new SpotifyApiError(response.status, details);
   }
 
   return (await response.json()) as T;
@@ -148,9 +178,16 @@ export function useSpotify() {
         }
 
         console.error("Error fetching Spotify data:", err);
-        setError(
-          "Could not fetch Spotify tracks. Check your token and Spotify permissions.",
-        );
+        if (err instanceof SpotifyApiError && err.status === 401) {
+          window.localStorage.removeItem("spotify_access_token");
+          setError(
+            `Spotify token is invalid or expired (401${err.details ? `: ${err.details}` : ""}). Refresh your token and restart dev server.`,
+          );
+        } else {
+          setError(
+            "Could not fetch Spotify tracks. Check your token and Spotify permissions.",
+          );
+        }
         setCurrentTrack(null);
       } finally {
         if (isActive) {

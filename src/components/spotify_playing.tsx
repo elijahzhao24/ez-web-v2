@@ -1,8 +1,7 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import dynamic from "next/dynamic";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSpotify } from "@/hooks/useSpotify";
 import { useTheme } from "@/context/themeProvider";
 import { FadeInSection } from "@/util/FadeInSection";
@@ -14,9 +13,29 @@ type SpotifyEmbedProps = {
   wide?: boolean;
 };
 
-const Spotify = dynamic<SpotifyEmbedProps>(
-  () => import("react-spotify-embed").then((module) => module.Spotify),
-  { ssr: false },
+function getEmbedUrl(link: string) {
+  try {
+    const parsed = new URL(link);
+    const pathname = parsed.pathname.replace(/\/$/, "");
+    return `https://open.spotify.com/embed${pathname}`;
+  } catch {
+    return link;
+  }
+}
+
+const SpotifyEmbed = ({ className, link, wide = false }: SpotifyEmbedProps) => (
+  <div className="overflow-hidden rounded-xl">
+    <iframe
+      className={className}
+      src={getEmbedUrl(link)}
+      width="100%"
+      height={wide ? "80" : "352"}
+      frameBorder="0"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy"
+      title="Spotify embed"
+    />
+  </div>
 );
 
 const SpotifyPlaying = () => {
@@ -29,28 +48,52 @@ const SpotifyPlaying = () => {
     isConfigured,
   } = useSpotify();
   const [activeList, setActiveList] = useState<TrackListType>("recent");
-  const { currentTheme } = useTheme();
+  const { currentTheme, isDarkMode } = useTheme();
   const tracksRef = useRef<HTMLDivElement>(null);
 
   const { displayTrack, tracksList, heading } = useMemo(() => {
     const sourceTracks = activeList === "top" ? topTracks : recentTracks;
-
-    if (currentTrack) {
-      return {
-        displayTrack: currentTrack,
-        tracksList: sourceTracks
-          .filter((track) => track.id !== currentTrack.id)
-          .slice(0, 4),
-        heading: "Now Playing",
-      };
-    }
+    const headingText =
+      activeList === "top" ? "#1 Track This Month" : "Recently Played";
+    const primaryTrack = sourceTracks[0] ?? currentTrack ?? null;
 
     return {
-      displayTrack: sourceTracks[0] ?? null,
-      tracksList: sourceTracks.slice(1, 5),
-      heading: activeList === "top" ? "#1 Track This Month" : "Recently Played",
+      displayTrack: primaryTrack,
+      tracksList: sourceTracks
+        .filter((track) => track.id !== primaryTrack?.id)
+        .slice(0, 4),
+      heading: headingText,
     };
   }, [activeList, currentTrack, recentTracks, topTracks]);
+
+  const [visibleDisplayTrack, setVisibleDisplayTrack] = useState(displayTrack);
+  const [visibleTracksList, setVisibleTracksList] = useState(tracksList);
+  const [isBigDelaying, setIsBigDelaying] = useState(true);
+  const [isSmallDelaying, setIsSmallDelaying] = useState(true);
+  const tracksListKey = useMemo(
+    () => tracksList.map((track) => track.id).join(","),
+    [tracksList],
+  );
+
+  useEffect(() => {
+    setIsBigDelaying(true);
+    setIsSmallDelaying(true);
+
+    const bigTimer = window.setTimeout(() => {
+      setVisibleDisplayTrack(displayTrack);
+      setIsBigDelaying(false);
+    }, 800);
+
+    const smallTimer = window.setTimeout(() => {
+      setVisibleTracksList(tracksList);
+      setIsSmallDelaying(false);
+    }, 1000);
+
+    return () => {
+      window.clearTimeout(bigTimer);
+      window.clearTimeout(smallTimer);
+    };
+  }, [activeList, displayTrack, tracksList, tracksListKey]);
 
   const handleTabClick = (type: TrackListType) => {
     setActiveList(type);
@@ -71,11 +114,26 @@ const SpotifyPlaying = () => {
   };
 
   const tabClassName = (type: TrackListType) =>
-    `px-3 py-1.5 text-sm rounded-lg transition-colors ${
+    `px-2.5 py-1 text-xs sm:text-sm rounded-lg transition-colors border ${
       activeList === type
-        ? "text-gray-900 dark:text-white font-medium"
-        : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+        ? "font-semibold border-black/10 dark:border-white/10"
+        : "border-transparent hover:border-black/10 dark:hover:border-white/10"
     }`;
+
+  const tabStyle = (type: TrackListType) => ({
+    backgroundColor:
+      activeList === type ? currentTheme.nav.bubble : "transparent",
+    color:
+      activeList === type
+        ? isDarkMode
+          ? "#f9fafb"
+          : "#0f172a"
+        : isDarkMode
+          ? "#9ca3af"
+          : "#475569",
+    transition:
+      "background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out",
+  });
 
   if (!isConfigured) {
     return (
@@ -90,21 +148,17 @@ const SpotifyPlaying = () => {
   }
 
   return (
-    <div className="w-full">
-      <div className={`mb-4 ${displayTrack ? "hidden sm:block" : "block"}`}>
+    <div className="w-full max-w-[760px] mx-auto">
+      <div
+        className={`mb-4 ${visibleDisplayTrack ? "hidden sm:block" : "block"}`}
+      >
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-semibold">{heading}</h2>
           <div className="flex space-x-2">
             <button
               onClick={() => handleTabClick("recent")}
               className={tabClassName("recent")}
-              style={{
-                backgroundColor:
-                  activeList === "recent"
-                    ? currentTheme.nav.bubble
-                    : "transparent",
-                transition: "background-color 0.2s ease-in-out",
-              }}
+              style={tabStyle("recent")}
               type="button"
             >
               Recently Played
@@ -112,13 +166,7 @@ const SpotifyPlaying = () => {
             <button
               onClick={() => handleTabClick("top")}
               className={tabClassName("top")}
-              style={{
-                backgroundColor:
-                  activeList === "top"
-                    ? currentTheme.nav.bubble
-                    : "transparent",
-                transition: "background-color 0.2s ease-in-out",
-              }}
+              style={tabStyle("top")}
               type="button"
             >
               Top Tracks
@@ -133,7 +181,7 @@ const SpotifyPlaying = () => {
             <h2 className="text-lg font-semibold">{heading}</h2>
           </div>
 
-          {loading && !displayTrack ? (
+          {(loading || isBigDelaying) && !visibleDisplayTrack ? (
             <div className="rounded-lg border border-border p-4 text-sm text-muted">
               Loading Spotify tracks...
             </div>
@@ -141,21 +189,21 @@ const SpotifyPlaying = () => {
 
           <AnimatePresence mode="sync">
             <motion.div
-              key={displayTrack?.spotifyUrl ?? "empty-track"}
+              key={visibleDisplayTrack?.spotifyUrl ?? "empty-track"}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              {displayTrack ? (
+              {visibleDisplayTrack ? (
                 <>
-                  <Spotify
+                  <SpotifyEmbed
                     wide
-                    link={displayTrack.spotifyUrl}
+                    link={visibleDisplayTrack.spotifyUrl}
                     className="w-full sm:hidden"
                   />
-                  <Spotify
-                    link={displayTrack.spotifyUrl}
+                  <SpotifyEmbed
+                    link={visibleDisplayTrack.spotifyUrl}
                     className="hidden sm:block w-full"
                   />
 
@@ -164,13 +212,7 @@ const SpotifyPlaying = () => {
                       <button
                         onClick={() => handleTabClick("recent")}
                         className={tabClassName("recent")}
-                        style={{
-                          backgroundColor:
-                            activeList === "recent"
-                              ? currentTheme.nav.bubble
-                              : "transparent",
-                          transition: "background-color 0.2s ease-in-out",
-                        }}
+                        style={tabStyle("recent")}
                         type="button"
                       >
                         Recently Played
@@ -178,13 +220,7 @@ const SpotifyPlaying = () => {
                       <button
                         onClick={() => handleTabClick("top")}
                         className={tabClassName("top")}
-                        style={{
-                          backgroundColor:
-                            activeList === "top"
-                              ? currentTheme.nav.bubble
-                              : "transparent",
-                          transition: "background-color 0.2s ease-in-out",
-                        }}
+                        style={tabStyle("top")}
                         type="button"
                       >
                         Top Tracks
@@ -196,7 +232,7 @@ const SpotifyPlaying = () => {
             </motion.div>
           </AnimatePresence>
 
-          {error && !loading ? (
+          {error && !loading && !isBigDelaying ? (
             <p className="mt-3 text-sm text-red-400">{error}</p>
           ) : null}
         </div>
@@ -211,13 +247,19 @@ const SpotifyPlaying = () => {
               transition={{ duration: 0.2 }}
             >
               <div className="grid gap-3">
-                {tracksList.map((track, index) => (
+                {visibleTracksList.map((track, index) => (
                   <FadeInSection key={track.id} delay={0.1 + index * 0.08}>
-                    <Spotify wide link={track.spotifyUrl} className="w-full" />
+                    <SpotifyEmbed
+                      wide
+                      link={track.spotifyUrl}
+                      className="w-full"
+                    />
                   </FadeInSection>
                 ))}
 
-                {!loading && tracksList.length === 0 ? (
+                {!loading &&
+                !isSmallDelaying &&
+                visibleTracksList.length === 0 ? (
                   <p className="rounded-lg border border-border p-4 text-sm text-muted">
                     No tracks available for this list yet.
                   </p>

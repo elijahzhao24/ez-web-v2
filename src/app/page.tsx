@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
 import FeaturedCarousel from "@/components/featured_carousel";
+import Footer from "@/components/footer";
 import ImageCarousel from "@/components/image_carousel";
 import SpotifyPlaying from "@/components/spotify_playing";
 import { FadeInSection } from "@/util/FadeInSection";
@@ -50,6 +51,10 @@ export default function Home() {
         <motion.section className="mt-4">
           <SpotifyPlaying />
         </motion.section>
+      </FadeInSection>
+
+      <FadeInSection delay={0.8}>
+        <Footer />
       </FadeInSection>
     </main>
   );
