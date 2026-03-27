@@ -122,14 +122,24 @@ export function useSpotify() {
   const [topTracks, setTopTracks] = useState<Track[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { token, isConfigured } = useSpotifyAuth();
+  const {
+    token,
+    isConfigured,
+    isLoading: isAuthLoading,
+    error: authError,
+  } = useSpotifyAuth();
 
   useEffect(() => {
+    if (isAuthLoading) {
+      setLoading(true);
+      return;
+    }
+
     if (!token) {
       setCurrentTrack(null);
       setRecentTracks([]);
       setTopTracks([]);
-      setError(null);
+      setError(authError);
       setLoading(false);
       return;
     }
@@ -179,13 +189,12 @@ export function useSpotify() {
 
         console.error("Error fetching Spotify data:", err);
         if (err instanceof SpotifyApiError && err.status === 401) {
-          window.localStorage.removeItem("spotify_access_token");
           setError(
-            `Spotify token is invalid or expired (401${err.details ? `: ${err.details}` : ""}). Refresh your token and restart dev server.`,
+            `Spotify token is invalid or expired (401${err.details ? `: ${err.details}` : ""}). Check Spotify app scopes and refresh token.`,
           );
         } else {
           setError(
-            "Could not fetch Spotify tracks. Check your token and Spotify permissions.",
+            "Could not fetch Spotify tracks. Check your Spotify credentials and permissions.",
           );
         }
         setCurrentTrack(null);
@@ -202,7 +211,7 @@ export function useSpotify() {
       isActive = false;
       controller.abort();
     };
-  }, [token]);
+  }, [token, isAuthLoading, authError]);
 
   return {
     currentTrack,

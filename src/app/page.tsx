@@ -47,7 +47,7 @@ export default function Home() {
         </motion.section>
       </FadeInSection>
 
-      <FadeInSection delay={0.4}>
+      <FadeInSection delay={1.2}>
         <motion.section className="mt-4">
           <SpotifyPlaying />
         </motion.section>

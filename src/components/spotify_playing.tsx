@@ -1,10 +1,9 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useSpotify } from "@/hooks/useSpotify";
+import { useMemo, useRef, useState } from "react";
 import { useTheme } from "@/context/themeProvider";
-import { FadeInSection } from "@/util/FadeInSection";
+import { useSpotify } from "@/hooks/useSpotify";
 
 type TrackListType = "recent" | "top";
 type SpotifyEmbedProps = {
@@ -38,6 +37,49 @@ const SpotifyEmbed = ({ className, link, wide = false }: SpotifyEmbedProps) => (
   </div>
 );
 
+const smallListVariants = {
+  hidden: {
+    opacity: 1,
+  },
+  show: {
+    opacity: 1,
+    transition: {
+      delayChildren: 0.9,
+      staggerChildren: 0.15,
+    },
+  },
+  exit: {
+    opacity: 0,
+    transition: {
+      duration: 0.2,
+      ease: "easeOut",
+    },
+  },
+};
+
+const smallItemVariants = {
+  hidden: {
+    opacity: 0,
+    y: 26,
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.35,
+      ease: "easeOut",
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: -18,
+    transition: {
+      duration: 0.2,
+      ease: "easeOut",
+    },
+  },
+};
+
 const SpotifyPlaying = () => {
   const {
     currentTrack,
@@ -50,6 +92,29 @@ const SpotifyPlaying = () => {
   const [activeList, setActiveList] = useState<TrackListType>("recent");
   const { currentTheme, isDarkMode } = useTheme();
   const tracksRef = useRef<HTMLDivElement>(null);
+  const preloadEmbedUrls = useMemo(() => {
+    const uniqueUrls = new Set<string>();
+
+    const addTrack = (spotifyUrl?: string) => {
+      if (!spotifyUrl) {
+        return;
+      }
+
+      uniqueUrls.add(getEmbedUrl(spotifyUrl));
+    };
+
+    for (const track of recentTracks) {
+      addTrack(track.spotifyUrl);
+    }
+
+    for (const track of topTracks) {
+      addTrack(track.spotifyUrl);
+    }
+
+    addTrack(currentTrack?.spotifyUrl);
+
+    return Array.from(uniqueUrls).slice(0, 10);
+  }, [recentTracks, topTracks, currentTrack?.spotifyUrl]);
 
   const { displayTrack, tracksList, heading } = useMemo(() => {
     const sourceTracks = activeList === "top" ? topTracks : recentTracks;
@@ -65,37 +130,16 @@ const SpotifyPlaying = () => {
       heading: headingText,
     };
   }, [activeList, currentTrack, recentTracks, topTracks]);
-
-  const [visibleDisplayTrack, setVisibleDisplayTrack] = useState(displayTrack);
-  const [visibleTracksList, setVisibleTracksList] = useState(tracksList);
-  const [isBigDelaying, setIsBigDelaying] = useState(true);
-  const [isSmallDelaying, setIsSmallDelaying] = useState(true);
   const tracksListKey = useMemo(
     () => tracksList.map((track) => track.id).join(","),
     [tracksList],
   );
 
-  useEffect(() => {
-    setIsBigDelaying(true);
-    setIsSmallDelaying(true);
-
-    const bigTimer = window.setTimeout(() => {
-      setVisibleDisplayTrack(displayTrack);
-      setIsBigDelaying(false);
-    }, 800);
-
-    const smallTimer = window.setTimeout(() => {
-      setVisibleTracksList(tracksList);
-      setIsSmallDelaying(false);
-    }, 1000);
-
-    return () => {
-      window.clearTimeout(bigTimer);
-      window.clearTimeout(smallTimer);
-    };
-  }, [activeList, displayTrack, tracksList, tracksListKey]);
-
   const handleTabClick = (type: TrackListType) => {
+    if (type === activeList) {
+      return;
+    }
+
     setActiveList(type);
 
     if (!tracksRef.current) {
@@ -135,23 +179,41 @@ const SpotifyPlaying = () => {
       "background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out",
   });
 
-  if (!isConfigured) {
+  if (!isConfigured && !loading) {
     return (
       <div className="w-full rounded-lg border border-border p-4 text-sm text-muted">
-        Spotify token is not configured. Set
-        <code className="px-1">NEXT_PUBLIC_SPOTIFY_ACCESS_TOKEN</code>
-        or
-        <code className="px-1">localStorage.spotify_access_token</code>
-        to show your tracks.
+        Spotify credentials are not configured. Set
+        <code className="px-1">SPOTIFY_CLIENT_ID</code>,
+        <code className="px-1">SPOTIFY_CLIENT_SECRET</code>, and
+        <code className="px-1">SPOTIFY_REFRESH_TOKEN</code>
+        in <code className="px-1">.env.local</code>, then restart the dev
+        server.
       </div>
     );
   }
 
   return (
     <div className="w-full max-w-[760px] mx-auto">
-      <div
-        className={`mb-4 ${visibleDisplayTrack ? "hidden sm:block" : "block"}`}
-      >
+      {preloadEmbedUrls.length > 0 ? (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0"
+        >
+          {preloadEmbedUrls.map((embedUrl) => (
+            <iframe
+              key={`spotify-preload-${embedUrl}`}
+              src={embedUrl}
+              width="1"
+              height="1"
+              loading="eager"
+              title="Spotify embed preload"
+              tabIndex={-1}
+            />
+          ))}
+        </div>
+      ) : null}
+
+      <div className={`mb-4 ${displayTrack ? "hidden sm:block" : "block"}`}>
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-semibold">{heading}</h2>
           <div className="flex space-x-2">
@@ -181,58 +243,64 @@ const SpotifyPlaying = () => {
             <h2 className="text-lg font-semibold">{heading}</h2>
           </div>
 
-          {(loading || isBigDelaying) && !visibleDisplayTrack ? (
+          {loading && !displayTrack ? (
             <div className="rounded-lg border border-border p-4 text-sm text-muted">
               Loading Spotify tracks...
             </div>
           ) : null}
 
-          <AnimatePresence mode="sync">
-            <motion.div
-              key={visibleDisplayTrack?.spotifyUrl ?? "empty-track"}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              {visibleDisplayTrack ? (
-                <>
-                  <SpotifyEmbed
-                    wide
-                    link={visibleDisplayTrack.spotifyUrl}
-                    className="w-full sm:hidden"
-                  />
-                  <SpotifyEmbed
-                    link={visibleDisplayTrack.spotifyUrl}
-                    className="hidden sm:block w-full"
-                  />
+          <AnimatePresence mode="wait">
+            {displayTrack ? (
+              <motion.div
+                key={`${activeList}-${displayTrack.spotifyUrl}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{
+                  opacity: 0,
+                  y: -16,
+                  transition: { duration: 0.2, ease: "easeOut" },
+                }}
+                transition={{
+                  delay: 0.7,
+                  duration: 0.35,
+                  ease: "easeInOut",
+                }}
+              >
+                <SpotifyEmbed
+                  wide
+                  link={displayTrack.spotifyUrl}
+                  className="w-full sm:hidden"
+                />
+                <SpotifyEmbed
+                  link={displayTrack.spotifyUrl}
+                  className="hidden sm:block w-full"
+                />
 
-                  <div className="mt-4 sm:hidden">
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => handleTabClick("recent")}
-                        className={tabClassName("recent")}
-                        style={tabStyle("recent")}
-                        type="button"
-                      >
-                        Recently Played
-                      </button>
-                      <button
-                        onClick={() => handleTabClick("top")}
-                        className={tabClassName("top")}
-                        style={tabStyle("top")}
-                        type="button"
-                      >
-                        Top Tracks
-                      </button>
-                    </div>
+                <div className="mt-4 sm:hidden">
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => handleTabClick("recent")}
+                      className={tabClassName("recent")}
+                      style={tabStyle("recent")}
+                      type="button"
+                    >
+                      Recently Played
+                    </button>
+                    <button
+                      onClick={() => handleTabClick("top")}
+                      className={tabClassName("top")}
+                      style={tabStyle("top")}
+                      type="button"
+                    >
+                      Top Tracks
+                    </button>
                   </div>
-                </>
-              ) : null}
-            </motion.div>
+                </div>
+              </motion.div>
+            ) : null}
           </AnimatePresence>
 
-          {error && !loading && !isBigDelaying ? (
+          {error && !loading ? (
             <p className="mt-3 text-sm text-red-400">{error}</p>
           ) : null}
         </div>
@@ -240,33 +308,30 @@ const SpotifyPlaying = () => {
         <div ref={tracksRef} className="w-full md:w-1/2">
           <AnimatePresence mode="wait">
             <motion.div
-              key={activeList}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.2 }}
+              key={`${activeList}-${tracksListKey}`}
+              className="grid gap-3"
+              variants={smallListVariants}
+              initial="hidden"
+              animate="show"
+              exit="exit"
             >
-              <div className="grid gap-3">
-                {visibleTracksList.map((track, index) => (
-                  <FadeInSection key={track.id} delay={0.1 + index * 0.08}>
-                    <SpotifyEmbed
-                      wide
-                      link={track.spotifyUrl}
-                      className="w-full"
-                    />
-                  </FadeInSection>
-                ))}
-
-                {!loading &&
-                !isSmallDelaying &&
-                visibleTracksList.length === 0 ? (
-                  <p className="rounded-lg border border-border p-4 text-sm text-muted">
-                    No tracks available for this list yet.
-                  </p>
-                ) : null}
-              </div>
+              {tracksList.map((track) => (
+                <motion.div key={track.id} variants={smallItemVariants}>
+                  <SpotifyEmbed
+                    wide
+                    link={track.spotifyUrl}
+                    className="w-full"
+                  />
+                </motion.div>
+              ))}
             </motion.div>
           </AnimatePresence>
+
+          {!loading && tracksList.length === 0 ? (
+            <p className="rounded-lg border border-border p-4 text-sm text-muted">
+              No tracks available for this list yet.
+            </p>
+          ) : null}
         </div>
       </div>
     </div>

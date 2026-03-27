@@ -2,40 +2,72 @@
 
 import { useEffect, useState } from "react";
 
-const LOCAL_STORAGE_TOKEN_KEY = "spotify_access_token";
-
-function sanitizeToken(raw: string | null | undefined): string | null {
-  if (!raw) {
-    return null;
-  }
-
-  const trimmed = raw.trim();
-  const unquoted = trimmed.replace(/^["']|["']$/g, "");
-
-  return unquoted.length > 0 ? unquoted : null;
+interface SpotifyCredsResponse {
+  accessToken?: string;
+  expiresIn?: number;
+  error?: string;
+  details?: string;
 }
 
+const SPOTIFY_CREDS_ENDPOINT = "/api/spotify/creds";
+
 export function useSpotifyAuth() {
-  const envToken = sanitizeToken(process.env.NEXT_PUBLIC_SPOTIFY_ACCESS_TOKEN);
-  const [token, setToken] = useState<string | null>(envToken);
+  const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Prefer .env token. Only fall back to localStorage when env token is absent.
-    if (envToken) {
-      setToken(envToken);
-      return;
-    }
+    const controller = new AbortController();
 
-    const storedToken = sanitizeToken(
-      window.localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY),
-    );
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, [envToken]);
+    const fetchToken = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const response = await fetch(SPOTIFY_CREDS_ENDPOINT, {
+          cache: "no-store",
+          signal: controller.signal,
+        });
+
+        const payload = (await response.json()) as SpotifyCredsResponse;
+        if (!response.ok || !payload.accessToken) {
+          throw new Error(
+            payload.details ??
+              payload.error ??
+              "Spotify credentials endpoint did not return an access token.",
+          );
+        }
+
+        setToken(payload.accessToken);
+      } catch (err) {
+        if (controller.signal.aborted) {
+          return;
+        }
+
+        setToken(null);
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Failed to fetch Spotify credentials.",
+        );
+      } finally {
+        if (!controller.signal.aborted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    void fetchToken();
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
 
   return {
     token,
+    isLoading,
+    error,
     isConfigured: Boolean(token),
   };
 }
