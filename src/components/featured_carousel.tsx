@@ -119,11 +119,11 @@ export default function FeaturedCarousel({
               <button
                 type="button"
                 onClick={prevFeatured}
-                className="absolute left-2 top-1/2 z-20 -translate-y-1/2 p-1.5 text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white"
+                className="absolute left-2 top-1/2 z-20 -translate-y-1/2 rounded-full bg-black/20 p-1 text-gray-200 shadow-sm backdrop-blur-sm transition-colors hover:bg-black/30 hover:text-white dark:bg-black/30 dark:text-gray-400 dark:hover:text-white"
                 aria-label="Previous featured item"
               >
                 <svg
-                  className="h-5 w-5"
+                  className="h-4 w-4"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -142,11 +142,11 @@ export default function FeaturedCarousel({
               <button
                 type="button"
                 onClick={nextFeatured}
-                className="absolute right-2 top-1/2 z-20 -translate-y-1/2 p-1.5 text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white"
+                className="absolute right-2 top-1/2 z-20 -translate-y-1/2 rounded-full bg-black/20 p-1 text-gray-200 shadow-sm backdrop-blur-sm transition-colors hover:bg-black/30 hover:text-white dark:bg-black/30 dark:text-gray-400 dark:hover:text-white"
                 aria-label="Next featured item"
               >
                 <svg
-                  className="h-5 w-5"
+                  className="h-4 w-4"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"

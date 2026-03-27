@@ -17,6 +17,11 @@
   --nav-bubble: #222222;
   --nav-text: #9ca3af;
   --nav-text-hover: #f9fafb;
+  --highlight-color: #f2c744;
+  --highlight-shadow-1: rgba(250, 198, 52, 0.62);
+  --highlight-shadow-2: rgba(250, 198, 52, 0.42);
+  --highlight-shadow-3: rgba(250, 198, 52, 0.24);
+  --highlight-filter: rgba(250, 198, 52, 0.46);
 }
 
 @theme inline {
@@ -45,6 +50,11 @@ html {
 
 html.dark {
   color-scheme: dark;
+  --highlight-color: #ffdc4d;
+  --highlight-shadow-1: rgba(255, 215, 0, 0.72);
+  --highlight-shadow-2: rgba(255, 215, 0, 0.48);
+  --highlight-shadow-3: rgba(255, 215, 0, 0.28);
+  --highlight-filter: rgba(255, 215, 0, 0.5);
 }
 
 @layer base {
@@ -100,6 +110,16 @@ html.dark {
 }
 
 @layer utilities {
+  .highlight {
+    color: var(--highlight-color);
+    font-weight: 700;
+    text-shadow:
+      0 0 6px var(--highlight-shadow-1),
+      0 0 14px var(--highlight-shadow-2),
+      0 0 24px var(--highlight-shadow-3);
+    filter: drop-shadow(0 0 4px var(--highlight-filter));
+  }
+
   .hide-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
