@@ -1,21 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type {
-  ContributionDay,
-  ContributionStats,
-  ContributionWeek,
-} from "@/types/contribution";
+import type { ContributionDay, ContributionWeek } from "@/types/contribution";
 
 interface ContributionCollectionResponse {
-  restrictedContributionsCount?: number;
-  totalCommitContributions?: number;
-  totalIssueContributions?: number;
-  totalPullRequestContributions?: number;
-  totalPullRequestReviewContributions?: number;
-  totalRepositoryContributions?: number;
   contributionCalendar?: {
-    totalContributions?: number;
     weeks?: ContributionWeek[];
   };
   commitContributionsByRepository?: Array<{
@@ -57,8 +46,40 @@ interface ContributionCollectionResponse {
 interface ContributionResponse {
   data?: {
     viewer?: {
-      login?: string;
       contributionsCollection?: ContributionCollectionResponse;
+    };
+  };
+  errors?: Array<{ message?: string }>;
+}
+
+interface ExtraActivityResponse {
+  data?: {
+    viewer?: {
+      pullRequests?: {
+        nodes?: Array<{
+          createdAt?: string | null;
+          closedAt?: string | null;
+          mergedAt?: string | null;
+        }>;
+      };
+      issues?: {
+        nodes?: Array<{
+          createdAt?: string | null;
+          closedAt?: string | null;
+        }>;
+      };
+      repositories?: {
+        nodes?: Array<{
+          createdAt?: string | null;
+          pushedAt?: string | null;
+          updatedAt?: string | null;
+        }>;
+      };
+      starredRepositories?: {
+        edges?: Array<{
+          starredAt?: string | null;
+        }>;
+      };
     };
   };
   errors?: Array<{ message?: string }>;
@@ -67,9 +88,10 @@ interface ContributionResponse {
 const DAYS_TO_SHOW = 182;
 const MAX_REPOSITORIES = 100;
 const MAX_ITEMS_PER_REPOSITORY = 100;
+const EXTRA_ITEMS_LIMIT = 100;
 
-function addContributionForDate(
-  dateMap: Record<string, number>,
+function incrementForDate(
+  activityByDate: Record<string, number>,
   occurredAt: string | null | undefined,
   fromDateOnly: string,
   toDateOnly: string,
@@ -84,20 +106,28 @@ function addContributionForDate(
     return;
   }
 
-  dateMap[date] = (dateMap[date] ?? 0) + amount;
+  activityByDate[date] = (activityByDate[date] ?? 0) + amount;
+}
+
+function buildDateRange(from: Date, to: Date): string[] {
+  const dates: string[] = [];
+  const cursor = new Date(
+    Date.UTC(from.getUTCFullYear(), from.getUTCMonth(), from.getUTCDate()),
+  );
+  const end = new Date(
+    Date.UTC(to.getUTCFullYear(), to.getUTCMonth(), to.getUTCDate()),
+  );
+
+  while (cursor <= end) {
+    dates.push(cursor.toISOString().slice(0, 10));
+    cursor.setUTCDate(cursor.getUTCDate() + 1);
+  }
+
+  return dates;
 }
 
 export const useContributions = () => {
   const [contributions, setContributions] = useState<ContributionDay[]>([]);
-  const [stats, setStats] = useState<ContributionStats>({
-    totalContributions: 0,
-    commits: 0,
-    pullRequestsOpened: 0,
-    reviews: 0,
-    issuesOpened: 0,
-    repositoriesCreated: 0,
-    privateContributions: 0,
-  });
   const githubToken = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
 
   useEffect(() => {
@@ -139,7 +169,12 @@ export const useContributions = () => {
           ),
         ).toISOString();
 
-        const res = await fetch("https://api.github.com/graphql", {
+        const dates = buildDateRange(fromDate, toDate);
+        const activityByDate = Object.fromEntries(
+          dates.map((date) => [date, 0]),
+        ) as Record<string, number>;
+
+        const contributionRes = await fetch("https://api.github.com/graphql", {
           method: "POST",
           cache: "no-store",
           headers: {
@@ -155,16 +190,8 @@ export const useContributions = () => {
                 $maxItemsPerRepository: Int!
               ) {
                 viewer {
-                  login
                   contributionsCollection(from: $from, to: $to) {
-                    restrictedContributionsCount
-                    totalCommitContributions
-                    totalIssueContributions
-                    totalPullRequestContributions
-                    totalPullRequestReviewContributions
-                    totalRepositoryContributions
                     contributionCalendar {
-                      totalContributions
                       weeks {
                         contributionDays {
                           date
@@ -229,39 +256,38 @@ export const useContributions = () => {
           }),
         });
 
-        const json = (await res.json()) as ContributionResponse;
+        const contributionJson =
+          (await contributionRes.json()) as ContributionResponse;
 
-        if (!res.ok || json.errors?.length) {
+        if (!contributionRes.ok || contributionJson.errors?.length) {
           console.error(
-            "Error fetching GitHub stats:",
-            json.errors?.[0]?.message ?? res.statusText,
+            "Error fetching GitHub contributions:",
+            contributionJson.errors?.[0]?.message ?? contributionRes.statusText,
           );
           return;
         }
 
-        const contributionCollection =
-          json.data?.viewer?.contributionsCollection;
-        if (!contributionCollection) {
-          setContributions([]);
-          return;
-        }
+        const collection =
+          contributionJson.data?.viewer?.contributionsCollection;
 
-        const allDays =
-          contributionCollection.contributionCalendar?.weeks?.flatMap(
+        const calendarDays =
+          collection?.contributionCalendar?.weeks?.flatMap(
             (week) => week.contributionDays,
           ) ?? [];
 
-        const filteredDays = allDays
-          .filter((day) => day.date >= fromDateOnly && day.date <= toDateOnly)
-          .sort((a, b) => a.date.localeCompare(b.date));
+        for (const day of calendarDays) {
+          if (day.date < fromDateOnly || day.date > toDateOnly) {
+            continue;
+          }
+          // Base profile-style contribution count.
+          activityByDate[day.date] =
+            (activityByDate[day.date] ?? 0) + day.contributionCount;
+        }
 
-        const customCountsByDate: Record<string, number> = {};
-
-        for (const repo of contributionCollection.commitContributionsByRepository ??
-          []) {
+        for (const repo of collection?.commitContributionsByRepository ?? []) {
           for (const node of repo.contributions?.nodes ?? []) {
-            addContributionForDate(
-              customCountsByDate,
+            incrementForDate(
+              activityByDate,
               node.occurredAt,
               fromDateOnly,
               toDateOnly,
@@ -270,11 +296,10 @@ export const useContributions = () => {
           }
         }
 
-        for (const repo of contributionCollection.issueContributionsByRepository ??
-          []) {
+        for (const repo of collection?.issueContributionsByRepository ?? []) {
           for (const node of repo.contributions?.nodes ?? []) {
-            addContributionForDate(
-              customCountsByDate,
+            incrementForDate(
+              activityByDate,
               node.occurredAt,
               fromDateOnly,
               toDateOnly,
@@ -282,11 +307,11 @@ export const useContributions = () => {
           }
         }
 
-        for (const repo of contributionCollection.pullRequestContributionsByRepository ??
+        for (const repo of collection?.pullRequestContributionsByRepository ??
           []) {
           for (const node of repo.contributions?.nodes ?? []) {
-            addContributionForDate(
-              customCountsByDate,
+            incrementForDate(
+              activityByDate,
               node.occurredAt,
               fromDateOnly,
               toDateOnly,
@@ -294,11 +319,11 @@ export const useContributions = () => {
           }
         }
 
-        for (const repo of contributionCollection.pullRequestReviewContributionsByRepository ??
+        for (const repo of collection?.pullRequestReviewContributionsByRepository ??
           []) {
           for (const node of repo.contributions?.nodes ?? []) {
-            addContributionForDate(
-              customCountsByDate,
+            incrementForDate(
+              activityByDate,
               node.occurredAt,
               fromDateOnly,
               toDateOnly,
@@ -306,42 +331,164 @@ export const useContributions = () => {
           }
         }
 
-        for (const node of contributionCollection.repositoryContributions
-          ?.nodes ?? []) {
-          addContributionForDate(
-            customCountsByDate,
+        for (const node of collection?.repositoryContributions?.nodes ?? []) {
+          incrementForDate(
+            activityByDate,
             node.occurredAt,
             fromDateOnly,
             toDateOnly,
           );
         }
 
-        const mergedDays: ContributionDay[] = filteredDays.map((day) => {
-          const customCount = customCountsByDate[day.date] ?? 0;
-          return {
-            ...day,
-            // Keep the higher count to avoid undercount if a nested connection is truncated.
-            contributionCount: Math.max(day.contributionCount, customCount),
-          };
-        });
+        // Extra non-calendar events to make the graph denser.
+        try {
+          const extraRes = await fetch("https://api.github.com/graphql", {
+            method: "POST",
+            cache: "no-store",
+            headers: {
+              Authorization: `bearer ${githubToken}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              query: `
+                query ($first: Int!) {
+                  viewer {
+                    pullRequests(
+                      first: $first
+                      states: [OPEN, CLOSED, MERGED]
+                      orderBy: { field: UPDATED_AT, direction: DESC }
+                    ) {
+                      nodes {
+                        createdAt
+                        closedAt
+                        mergedAt
+                      }
+                    }
+                    issues(
+                      first: $first
+                      states: [OPEN, CLOSED]
+                      orderBy: { field: UPDATED_AT, direction: DESC }
+                    ) {
+                      nodes {
+                        createdAt
+                        closedAt
+                      }
+                    }
+                    repositories(
+                      first: $first
+                      ownerAffiliations: [OWNER, COLLABORATOR, ORGANIZATION_MEMBER]
+                      orderBy: { field: PUSHED_AT, direction: DESC }
+                    ) {
+                      nodes {
+                        createdAt
+                        pushedAt
+                        updatedAt
+                      }
+                    }
+                    starredRepositories(
+                      first: $first
+                      orderBy: { field: STARRED_AT, direction: DESC }
+                    ) {
+                      edges {
+                        starredAt
+                      }
+                    }
+                  }
+                }
+              `,
+              variables: { first: EXTRA_ITEMS_LIMIT },
+            }),
+          });
 
-        setContributions(mergedDays);
+          const extraJson = (await extraRes.json()) as ExtraActivityResponse;
 
-        setStats({
-          totalContributions:
-            contributionCollection.contributionCalendar?.totalContributions ??
-            0,
-          commits: contributionCollection.totalCommitContributions ?? 0,
-          pullRequestsOpened:
-            contributionCollection.totalPullRequestContributions ?? 0,
-          reviews:
-            contributionCollection.totalPullRequestReviewContributions ?? 0,
-          issuesOpened: contributionCollection.totalIssueContributions ?? 0,
-          repositoriesCreated:
-            contributionCollection.totalRepositoryContributions ?? 0,
-          privateContributions:
-            contributionCollection.restrictedContributionsCount ?? 0,
-        });
+          if (extraRes.ok && !extraJson.errors?.length) {
+            for (const pr of extraJson.data?.viewer?.pullRequests?.nodes ??
+              []) {
+              incrementForDate(
+                activityByDate,
+                pr.createdAt,
+                fromDateOnly,
+                toDateOnly,
+              );
+              incrementForDate(
+                activityByDate,
+                pr.closedAt,
+                fromDateOnly,
+                toDateOnly,
+              );
+              incrementForDate(
+                activityByDate,
+                pr.mergedAt,
+                fromDateOnly,
+                toDateOnly,
+              );
+            }
+
+            for (const issue of extraJson.data?.viewer?.issues?.nodes ?? []) {
+              incrementForDate(
+                activityByDate,
+                issue.createdAt,
+                fromDateOnly,
+                toDateOnly,
+              );
+              incrementForDate(
+                activityByDate,
+                issue.closedAt,
+                fromDateOnly,
+                toDateOnly,
+              );
+            }
+
+            for (const repo of extraJson.data?.viewer?.repositories?.nodes ??
+              []) {
+              incrementForDate(
+                activityByDate,
+                repo.createdAt,
+                fromDateOnly,
+                toDateOnly,
+              );
+              incrementForDate(
+                activityByDate,
+                repo.pushedAt,
+                fromDateOnly,
+                toDateOnly,
+              );
+              incrementForDate(
+                activityByDate,
+                repo.updatedAt,
+                fromDateOnly,
+                toDateOnly,
+              );
+            }
+
+            for (const edge of extraJson.data?.viewer?.starredRepositories
+              ?.edges ?? []) {
+              incrementForDate(
+                activityByDate,
+                edge.starredAt,
+                fromDateOnly,
+                toDateOnly,
+              );
+            }
+          }
+        } catch (error) {
+          console.warn(
+            "Extra activity query failed; continuing with base activity.",
+            error,
+          );
+        }
+
+        const denseDays: ContributionDay[] = dates.map((date) => ({
+          date,
+          contributionCount: activityByDate[date] ?? 0,
+          color: "#ebedf0",
+          contributionLevel: (calendarDays.find((day) => day.date === date)
+            ?.contributionLevel ??
+            "NONE") as ContributionDay["contributionLevel"],
+        }));
+
+        setContributions(denseDays);
       } catch (error) {
         console.error("Error fetching GitHub stats:", error);
       }
@@ -350,5 +497,5 @@ export const useContributions = () => {
     getGitHubContributionStats();
   }, [githubToken]);
 
-  return { contributions, stats };
+  return { contributions };
 };

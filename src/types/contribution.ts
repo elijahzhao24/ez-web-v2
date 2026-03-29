@@ -15,13 +15,3 @@ export interface ContributionDay {
 export interface ContributionWeek {
   contributionDays: ContributionDay[];
 }
-
-export interface ContributionStats {
-  totalContributions: number;
-  commits: number;
-  pullRequestsOpened: number;
-  reviews: number;
-  issuesOpened: number;
-  repositoriesCreated: number;
-  privateContributions: number;
-}

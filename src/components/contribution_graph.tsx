@@ -20,11 +20,7 @@ const DARK_CONTRIBUTION_COLORS: Record<ContributionLevel, string> = {
   FOURTH_QUARTILE: "#39d353",
 };
 
-interface DisplayContributionDay extends ContributionDay {
-  displayLevel: ContributionLevel;
-}
-
-function getFixedLevel(contributionCount: number): ContributionLevel {
+function getDisplayLevel(contributionCount: number): ContributionLevel {
   if (contributionCount <= 0) {
     return "NONE";
   }
@@ -48,17 +44,9 @@ export default function ContributionGraph() {
     : LIGHT_CONTRIBUTION_COLORS;
 
   const days = contributions.slice(-182);
-
-  const boostedDays: DisplayContributionDay[] = days.map((day) => {
-    return {
-      ...day,
-      displayLevel: getFixedLevel(day.contributionCount),
-    };
-  });
-
-  const weeks: DisplayContributionDay[][] = [];
-  for (let i = 0; i < boostedDays.length; i += 7) {
-    weeks.push(boostedDays.slice(i, i + 7));
+  const weeks: ContributionDay[][] = [];
+  for (let i = 0; i < days.length; i += 7) {
+    weeks.push(days.slice(i, i + 7));
   }
 
   return (
@@ -122,7 +110,8 @@ export default function ContributionGraph() {
                       key={day.date}
                       className="h-4 w-4 rounded-sm"
                       style={{
-                        backgroundColor: palette[day.displayLevel],
+                        backgroundColor:
+                          palette[getDisplayLevel(day.contributionCount)],
                       }}
                       title={day.date}
                     />
