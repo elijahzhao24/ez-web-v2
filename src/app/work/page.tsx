@@ -1,7 +1,8 @@
+import ContributionGraph from "@/components/contribution_graph";
+import Footer from "@/components/footer";
+import ProjectsSection from "@/components/projects_section";
 import WorkExperienceItem from "@/components/work_experience_item";
 import { FadeInSection } from "@/util/FadeInSection";
-import Footer from "@/components/footer";
-import ContributionGraph from "@/components/contribution_graph";
 
 export default function WorkPage() {
   const workItems = [
@@ -10,7 +11,9 @@ export default function WorkPage() {
       company: "Nexera Robotics",
       date: "Summer 2026",
       href: "https://www.nexera-robotics.com/",
-      details: ["Developing robotic grasping solutions that enable robots to reliably handle diverse, unstructured, and delicate objects."],
+      details: [
+        "Developing robotic grasping solutions that enable robots to reliably handle diverse, unstructured, and delicate objects.",
+      ],
       accentCompany: true,
       showCursorBadge: true,
       cursorBadgeText: "View More",
@@ -21,12 +24,12 @@ export default function WorkPage() {
       date: "May 2025 - Sep 2025",
       href: "https://www.cs.ubc.ca/students/undergrad/courses/core-curriculum#:~:text=CPSC%20221%C2%A0%2D%C2%A0Basic%20Algorithms%20and%20Data%20Structures",
       details: [
-        "Teaching data structure and algorithms in C++ to 110+ students (CPSC 221)"
+        "Teaching data structure and algorithms in C++ to 110+ students (CPSC 221)",
       ],
       accentCompany: false,
       showCursorBadge: true,
       cursorBadgeText: "View More",
-    }
+    },
   ];
 
   const leadershipItems = [
@@ -37,7 +40,7 @@ export default function WorkPage() {
       href: "https://www.ubcbiztech.com/",
       details: [
         "Developing event features that elevate the experience of our 800+ members.",
-        "Built a stock market app and NFC cards before—currently building a robot 🤖."
+        "Built a stock market app and NFC cards before—currently building a robot 🤖.",
       ],
       accentCompany: true,
       showCursorBadge: true,
@@ -113,6 +116,10 @@ export default function WorkPage() {
 
         <div>
           <ContributionGraph />
+        </div>
+
+        <div>
+          <ProjectsSection />
         </div>
 
         <FadeInSection delay={0.8}>

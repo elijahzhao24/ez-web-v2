@@ -1,0 +1,58 @@
+import Image from "next/image";
+import tempImageTwo from "@/app/temp2.png";
+
+export const metadata = {
+  title: "BluePrint NFC | Project",
+  description: "Project overview for BluePrint NFC",
+};
+
+<main className="flex min-h-screen flex-col bg-background text-foreground nav container-width">
+  <section className="section w-full max-w-4xl space-y-8">
+    <div className="grid grid-cols-3 gap-4 border-b border-border pb-4 sm:grid-cols-12 sm:gap-6">
+      <div className="col-span-1 space-y-0.5 sm:col-span-4">
+        <p className="text-[0.7rem] uppercase tracking-[0.22em] text-muted">Title</p>
+        <p className="text-[1.1rem] leading-tight text-foreground sm:text-[1.45rem]">
+          BluePrint NFC
+        </p>
+      </div>
+
+      <div className="col-span-1 space-y-0.5 sm:col-span-4">
+        <p className="text-[0.7rem] uppercase tracking-[0.22em] text-muted">Role</p>
+        <p className="text-[1.1rem] leading-tight text-foreground sm:text-[1.45rem]">
+          Development Lead
+        </p>
+      </div>
+
+      <div className="col-span-1 space-y-0.5 sm:col-span-4">
+        <p className="text-[0.7rem] uppercase tracking-[0.22em] text-muted">Year</p>
+        <p className="text-[1.1rem] leading-tight text-foreground sm:text-[1.45rem]">
+          2025
+        </p>
+      </div>
+    </div>
+
+    <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-border bg-surface/10">
+      <Image
+        src={tempImageTwo}
+        alt="BluePrint NFC interface preview"
+        fill
+        className="object-cover"
+        priority
+        sizes="(max-width: 768px) 100vw, 60vw"
+      />
+    </div>
+
+    <p className="max-w-3xl text-[1.06rem] leading-relaxed text-foreground/90 sm:text-[1.2rem]">
+      Designed and built an NFC-powered event workflow that made networking
+      faster and more intentional, supporting high-throughput check-ins,
+      profile exchange, and post-event analytics for organizers.
+    </p>
+
+    <hr className="border-border" />
+
+    <p className="text-[0.98rem] leading-relaxed text-muted sm:text-[1.05rem]">
+      Won recognition at UBC CUS 2025 and now serves as a template for future
+      event tooling at BizTech.
+    </p>
+  </section>
+</main>
