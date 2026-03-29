@@ -1,4 +1,7 @@
 import WorkExperienceItem from "@/components/work_experience_item";
+import { FadeInSection } from "@/util/FadeInSection";
+import Footer from "@/components/footer";
+import ContributionGraph from "@/components/contribution_graph";
 
 export default function WorkPage() {
   const workItems = [
@@ -6,50 +9,39 @@ export default function WorkPage() {
       title: "Software Intern",
       company: "Nexera Robotics",
       date: "Summer 2026",
-      href: "https://openai.com",
-      details: ["Incoming to OpenAI in San Francisco for Summer 2026."],
+      href: "https://www.nexera-robotics.com/",
+      details: ["Developing robotic grasping solutions that enable robots to reliably handle diverse, unstructured, and delicate objects."],
       accentCompany: true,
       showCursorBadge: true,
-      cursorBadgeText: "In Progress",
+      cursorBadgeText: "View More",
     },
     {
-      title: "Software Engineer Intern",
-      company: "Palantir",
+      title: "CPSC Teaching Assisant",
+      company: "UBC",
       date: "May 2025 - Sep 2025",
-      href: "https://www.palantir.com",
+      href: "https://www.cs.ubc.ca/students/undergrad/courses/core-curriculum#:~:text=CPSC%20221%C2%A0%2D%C2%A0Basic%20Algorithms%20and%20Data%20Structures",
       details: [
-        "Worked on internal platform tooling to speed up developer workflows.",
-        "Shipped production features across multiple internal services.",
+        "Teaching data structure and algorithms in C++ to 110+ students (CPSC 221)"
       ],
       accentCompany: false,
       showCursorBadge: true,
-      cursorBadgeText: "View Overview",
-    },
+      cursorBadgeText: "View More",
+    }
+  ];
+
+  const leadershipItems = [
     {
-      title: "Forward Deployed Software Engineer Intern",
-      company: "Palantir",
-      date: "Sep 2024 - Dec 2024",
-      href: "https://www.palantir.com",
+      title: "Development Lead",
+      company: "UBC BizTech",
+      date: "2025-Present ",
+      href: "https://www.ubcbiztech.com/",
       details: [
-        "Partnered with end users to build data workflows in production.",
-        "Delivered tools tailored to operational and customer needs.",
+        "Developing event features that elevate the experience of our 800+ members.",
+        "Built a stock market app and NFC cards before—currently building a robot 🤖."
       ],
-      accentCompany: false,
+      accentCompany: true,
       showCursorBadge: true,
-      cursorBadgeText: "View Overview",
-    },
-    {
-      title: "Software Engineer Intern",
-      company: "SAP",
-      date: "Jan 2024 - Aug 2024",
-      href: "https://www.sap.com",
-      details: [
-        "Built full-stack product improvements for enterprise users.",
-        "Improved reliability and release quality through testing upgrades.",
-      ],
-      accentCompany: false,
-      showCursorBadge: false,
-      cursorBadgeText: "View Overview",
+      cursorBadgeText: "View More",
     },
   ];
 
@@ -64,43 +56,68 @@ export default function WorkPage() {
             computer science @{" "}
             <span className="font-semibold text-foreground highlight">ubc</span>
           </p>
-          <p className="max-w-3xl pt-1 text-[1.1rem] leading-tight font-light text-foreground sm:text-[1.6rem]">
+          <p className="max-w-3xl pt-1 text-[1.1rem] leading-tight font-light text-foreground sm:text-[1.5rem]">
             i&apos;m interested in the future of how we{" "}
             <span className="highlight italic">interact</span> with the internet
             as AI becomes part of everyday workflows.
           </p>
         </header>
 
-        <div className="space-y-1">
-          <p className="text-xs sm:text-sm uppercase tracking-[0.32em] text-muted">
-            Work
-          </p>
+        <div className="space-y-4">
+          <div className="space-y-0">
+            <p className="text-xs sm:text-sm uppercase tracking-[0.32em] text-muted">
+              Work
+            </p>
+
+            <div className="space-y-0">
+              {workItems.map((item, index) => (
+                <WorkExperienceItem
+                  key={`${item.title}-${item.company}-${item.date}`}
+                  title={item.title}
+                  company={item.company}
+                  date={item.date}
+                  href={item.href}
+                  details={item.details}
+                  showDivider={index > 0}
+                  accentCompany={item.accentCompany}
+                  showCursorBadge={item.showCursorBadge}
+                  cursorBadgeText={item.cursorBadgeText}
+                />
+              ))}
+            </div>
+          </div>
 
           <div className="space-y-0">
-            {workItems.map((item, index) => (
-              <WorkExperienceItem
-                key={`${item.title}-${item.company}-${item.date}`}
-                title={item.title}
-                company={item.company}
-                date={item.date}
-                href={item.href}
-                details={item.details}
-                showDivider={index > 0}
-                accentCompany={item.accentCompany}
-                showCursorBadge={item.showCursorBadge}
-                cursorBadgeText={item.cursorBadgeText}
-              />
-            ))}
+            <p className="text-xs sm:text-sm uppercase tracking-[0.32em] text-muted">
+              Leadership
+            </p>
+
+            <div className="space-y-0">
+              {leadershipItems.map((item, index) => (
+                <WorkExperienceItem
+                  key={`${item.title}-${item.company}-${item.date}`}
+                  title={item.title}
+                  company={item.company}
+                  date={item.date}
+                  href={item.href}
+                  details={item.details}
+                  showDivider={index > 0}
+                  accentCompany={item.accentCompany}
+                  showCursorBadge={item.showCursorBadge}
+                  cursorBadgeText={item.cursorBadgeText}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
-        <p className="pt-2 text-sm sm:text-base leading-relaxed text-muted">
-          You can reach out at{" "}
-          <span className="font-semibold text-foreground">
-            elijahzhao24@gmail.com
-          </span>{" "}
-          or through my socials in the nav.
-        </p>
+        <div>
+          <ContributionGraph />
+        </div>
+
+        <FadeInSection delay={0.8}>
+          <Footer />
+        </FadeInSection>
       </section>
     </main>
   );

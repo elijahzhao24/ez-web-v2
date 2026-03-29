@@ -49,16 +49,16 @@ export default function WorkExperienceItem({
         onFocus={() => setIsActive(true)}
         onBlur={() => setIsActive(false)}
       >
-        <article className="rounded-xl py-3.5 transition-colors duration-150 ease-out hover:bg-surface/10 sm:py-4">
+        <article className="rounded-xl py-3 transition-colors duration-150 ease-out hover:bg-surface/10">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-            <h3 className="text-[1.22rem] leading-tight text-foreground sm:text-[1.56rem]">
+            <h3 className="text-[1.1rem] leading-tight text-foreground sm:text-[1.4rem]">
               {title}{" "}
               <span className={accentCompany ? "highlight" : "text-muted"}>
                 @ {company}
               </span>
             </h3>
 
-            <div className="flex items-center gap-3 text-xs text-muted sm:text-[0.95rem]">
+            <div className="flex items-center gap-3 text-xs text-muted sm:text-[0.90rem]">
               <span>{date}</span>
               <span className="text-base leading-none text-muted-2">›</span>
             </div>
