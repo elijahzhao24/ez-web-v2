@@ -86,12 +86,15 @@ export default function ProjectsSection() {
               <button
                 key={filter}
                 type="button"
-                className={`inline-flex items-baseline gap-[0.14em] font-normal transition-colors duration-150 ${
+                className={`inline-flex items-baseline gap-[0.14em] font-normal transition-all duration-150 hover:-translate-y-px ${
                   isActive
-                    ? "text-foreground"
-                    : "text-muted hover:text-foreground/80"
+                    ? "text-foreground hover:text-foreground/85"
+                    : "text-muted hover:text-foreground/88"
                 }`}
-                onClick={() => setActiveFilter(filter)}
+                onClick={() => {
+                  setActiveHoverSlug(null);
+                  setActiveFilter(filter);
+                }}
                 aria-pressed={isActive}
               >
                 <span>{FILTER_LABELS[filter]}</span>
@@ -102,81 +105,100 @@ export default function ProjectsSection() {
         </div>
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
-        {filteredProjects.map((project) => (
-          <Link
-            key={project.slug}
-            href={`/project/${project.slug}`}
-            className="group relative block focus:outline-none"
-            onMouseEnter={(event) => {
-              const rect = event.currentTarget.getBoundingClientRect();
-              setMousePosition({
-                x: rect.width / 2,
-                y: rect.height * 0.35,
-              });
-              setActiveHoverSlug(project.slug);
-            }}
-            onMouseLeave={() => setActiveHoverSlug(null)}
-            onMouseMove={(event) => {
-              const rect = event.currentTarget.getBoundingClientRect();
-              setMousePosition({
-                x: event.clientX - rect.left,
-                y: event.clientY - rect.top,
-              });
-            }}
-            onFocus={(event) => {
-              const rect = event.currentTarget.getBoundingClientRect();
-              setMousePosition({
-                x: rect.width / 2,
-                y: rect.height * 0.35,
-              });
-              setActiveHoverSlug(project.slug);
-            }}
-            onBlur={() => setActiveHoverSlug(null)}
-          >
-            <article className="space-y-2.5">
-              <div className="relative aspect-[16/10] overflow-hidden border border-border bg-surface/10">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  fill
-                  className="object-cover transition duration-300 group-hover:scale-[1.02] group-hover:brightness-[0.82]"
-                  sizes="(max-width: 640px) 100vw, 50vw"
-                />
-                <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/20" />
-              </div>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={activeFilter}
+          className="grid gap-5 sm:grid-cols-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.22, ease: "easeOut" }}
+        >
+          {filteredProjects.map((project, index) => (
+            <motion.div
+              key={project.slug}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.24,
+                delay: index * 0.05,
+                ease: "easeOut",
+              }}
+            >
+              <Link
+                href={`/project/${project.slug}`}
+                className="group relative block focus:outline-none"
+                onMouseEnter={(event) => {
+                  const rect = event.currentTarget.getBoundingClientRect();
+                  setMousePosition({
+                    x: rect.width / 2,
+                    y: rect.height * 0.35,
+                  });
+                  setActiveHoverSlug(project.slug);
+                }}
+                onMouseLeave={() => setActiveHoverSlug(null)}
+                onMouseMove={(event) => {
+                  const rect = event.currentTarget.getBoundingClientRect();
+                  setMousePosition({
+                    x: event.clientX - rect.left,
+                    y: event.clientY - rect.top,
+                  });
+                }}
+                onFocus={(event) => {
+                  const rect = event.currentTarget.getBoundingClientRect();
+                  setMousePosition({
+                    x: rect.width / 2,
+                    y: rect.height * 0.35,
+                  });
+                  setActiveHoverSlug(project.slug);
+                }}
+                onBlur={() => setActiveHoverSlug(null)}
+              >
+                <article className="space-y-2.5">
+                  <div className="relative aspect-[16/10] overflow-hidden bg-surface/10">
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      fill
+                      className="object-cover transition duration-300 group-hover:scale-[1.02] group-hover:brightness-[0.82]"
+                      sizes="(max-width: 640px) 100vw, 50vw"
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/20" />
+                  </div>
 
-              <div className="space-y-0.5">
-                <h4 className="text-[0.80rem] leading-snug text-foreground sm:text-[0.8rem]">
-                  {project.title}
-                </h4>
-                <p className="text-[0.7rem] leading-relaxed text-muted">
-                  {project.note}
-                </p>
-              </div>
-            </article>
+                  <div className="space-y-0.5">
+                    <h4 className="text-[0.80rem] leading-snug text-foreground sm:text-[0.8rem]">
+                      {project.title}
+                    </h4>
+                    <p className="text-[0.7rem] leading-relaxed text-muted">
+                      {project.note}
+                    </p>
+                  </div>
+                </article>
 
-            <AnimatePresence>
-              {activeHoverSlug === project.slug ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.92 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.92 }}
-                  transition={{ duration: 0.14, ease: "easeOut" }}
-                  className="pointer-events-none absolute hidden sm:flex items-center rounded-full border border-border bg-background px-3 py-1.5 text-xs uppercase tracking-[0.12em] text-foreground shadow-lg"
-                  style={{
-                    left: mousePosition.x,
-                    top: mousePosition.y,
-                    transform: "translate(-50%, -145%)",
-                  }}
-                >
-                  View More
-                </motion.div>
-              ) : null}
-            </AnimatePresence>
-          </Link>
-        ))}
-      </div>
+                <AnimatePresence>
+                  {activeHoverSlug === project.slug ? (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.92 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.92 }}
+                      transition={{ duration: 0.14, ease: "easeOut" }}
+                      className="pointer-events-none absolute hidden sm:flex items-center rounded-full border border-border bg-background px-3 py-1.5 text-xs uppercase tracking-[0.12em] text-foreground shadow-lg"
+                      style={{
+                        left: mousePosition.x,
+                        top: mousePosition.y,
+                        transform: "translate(-50%, -145%)",
+                      }}
+                    >
+                      View More
+                    </motion.div>
+                  ) : null}
+                </AnimatePresence>
+              </Link>
+            </motion.div>
+          ))}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }

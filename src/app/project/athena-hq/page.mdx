@@ -1,4 +1,4 @@
-import Image from "next/image";
+import ProjectHeader from "../project_header";
 import tempImage from "@/app/temp.jpg";
 
 export const metadata = {
@@ -8,51 +8,19 @@ export const metadata = {
 
 <main className="flex min-h-screen flex-col bg-background text-foreground nav container-width">
   <section className="w-full max-w-4xl space-y-8 pt-0 pb-6 sm:pb-8">
-    <div className="grid grid-cols-3 gap-4 border-b border-border pb-4 sm:grid-cols-12 sm:gap-6">
-      <div className="col-span-1 space-y-0.5 sm:col-span-4">
-        <p className="text-[0.7rem] uppercase tracking-[0.22em] text-muted">Title</p>
-        <p className="text-[1.1rem] leading-tight text-foreground sm:text-[1.45rem]">
-          AthenaHQ
-        </p>
-      </div>
-
-      <div className="col-span-1 space-y-0.5 sm:col-span-4">
-        <p className="text-[0.7rem] uppercase tracking-[0.22em] text-muted">Role</p>
-        <p className="text-[1.1rem] leading-tight text-foreground sm:text-[1.45rem]">
-          Software Engineer
-        </p>
-      </div>
-
-      <div className="col-span-1 space-y-0.5 sm:col-span-4">
-        <p className="text-[0.7rem] uppercase tracking-[0.22em] text-muted">Year</p>
-        <p className="text-[1.1rem] leading-tight text-foreground sm:text-[1.45rem]">
-          2025
-        </p>
-      </div>
-    </div>
-
-    <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-border bg-surface/10">
-      <Image
-        src={tempImage}
-        alt="AthenaHQ onboarding interface"
-        fill
-        className="object-cover"
-        priority
-        sizes="(max-width: 768px) 100vw, 60vw"
-      />
-    </div>
-
-    <p className="max-w-3xl text-[1.06rem] leading-relaxed text-foreground/90 sm:text-[1.2rem]">
-      Built end-to-end onboarding flow with TypeScript, React, and AI SDK,
-      using a brand data ingestion pipeline to optimize LLM context
-      understanding and cut client onboarding time across 30+ enterprise
-      organizations.
-    </p>
+    <ProjectHeader
+      title="AthenaHQ"
+      role="Software Engineer"
+      year="2025"
+      imageSrc={tempImage}
+      imageAlt="AthenaHQ onboarding interface"
+      description="Built end-to-end onboarding flow with TypeScript, React, and AI SDK, using a brand data ingestion pipeline to optimize LLM context understanding and cut client onboarding time across 30+ enterprise organizations."
+    />
 
     <hr className="border-border" />
 
-    <p className="text-[0.98rem] leading-relaxed text-muted sm:text-[1.05rem]">
+    <div className="text-[0.98rem] leading-relaxed text-muted sm:text-[1.05rem]">
       This work is confidential, reach out to me if you&apos;d like to know more.
-    </p>
+    </div>
   </section>
 </main>

@@ -1,9 +1,12 @@
 "use client";
 
 import Image, { type StaticImageData } from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import tempImage from "@/app/temp.jpg";
+import biztech from "@/app/images/biztech.jpg";
+import nexera from "@/app/images/nexera.webp";
+import hackathons from "@/app/images/hackathons.webp";
 
 type Slide = {
   id: number;
@@ -15,17 +18,42 @@ type Slide = {
 const AUTO_ROTATE_MS = 6500;
 const TICK_MS = 50;
 
+// Manually edit this list to control each slide's content and order.
+const SLIDES: Slide[] = [
+  {
+    id: 1,
+    image: biztech,
+    header: "Development Lead @ UBC Biztech",
+    description: "leading development for UBC's largest tech community",
+  },
+  {
+    id: 2,
+    image: nexera,
+    header: "SWE @ Nexera Robotics",
+    description: "developing universal grasping solutions for all robots",
+  },
+  {
+    id: 3,
+    image: hackathons,
+    header: "Hackathons, Pitches, and Competitions",
+    description: "Trying my best to stack wins",
+  },
+  {
+    id: 4,
+    image: tempImage,
+    header: "header 4",
+    description: "description 4",
+  },
+  {
+    id: 5,
+    image: tempImage,
+    header: "header 5",
+    description: "description 5",
+  },
+];
+
 export default function ImageCarousel() {
-  const slides = useMemo<Slide[]>(
-    () =>
-      Array.from({ length: 5 }, (_, i) => ({
-        id: i + 1,
-        image: tempImage,
-        header: `header ${i + 1}`,
-        description: `description ${i + 1}`,
-      })),
-    [],
-  );
+  const slides = SLIDES;
 
   const [carouselState, setCarouselState] = useState({
     currentIndex: 0,
@@ -207,10 +235,10 @@ export default function ImageCarousel() {
         </button>
 
         <div className="absolute bottom-4 left-4 z-10 max-w-[80%] sm:left-6">
-          <h2 className="text-lg font-semibold text-white sm:text-xl">
+          <h2 className="text-[0.9rem] font-semibold text-white sm:text-[1.0rem]">
             {activeSlide.header}
           </h2>
-          <p className="mt-1 text-xs text-white/90 sm:text-sm">
+          <p className="text-[0.7rem] text-white/90 m:text-[0.9rem]">
             {activeSlide.description}
           </p>
         </div>

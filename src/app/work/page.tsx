@@ -9,10 +9,10 @@ import WorkExperienceItem from "@/components/work_experience_item";
 import { FadeInSection } from "@/util/FadeInSection";
 
 export default function WorkPage() {
-  const headingText = "hi, i'm elijah";
+  const headingText = "hi, i'm Elijah";
   const typewriterSpeed = 52;
   const typewriterDuration = (headingText.length * typewriterSpeed) / 1000;
-  const introStartDelay = typewriterDuration + 0.18;
+  const introStartDelay = typewriterDuration + 0.12;
 
   const workItems = [
     {
@@ -99,7 +99,7 @@ export default function WorkPage() {
         </header>
 
         <div className="space-y-4">
-          <FadeInSection delay={introStartDelay + 0.3}>
+          <FadeInSection delay={introStartDelay + 0.12} duration={0.55}>
             <div className="space-y-0">
               <p className="text-xs sm:text-sm uppercase tracking-[0.32em] text-muted">
                 Work
@@ -109,7 +109,8 @@ export default function WorkPage() {
                 {workItems.map((item, index) => (
                   <FadeInSection
                     key={`${item.title}-${item.company}-${item.date}`}
-                    delay={introStartDelay + 0.4 + index * 0.11}
+                    delay={introStartDelay + 0.18 + index * 0.08}
+                    duration={0.5}
                   >
                     <WorkExperienceItem
                       title={item.title}
@@ -128,7 +129,7 @@ export default function WorkPage() {
             </div>
           </FadeInSection>
 
-          <FadeInSection delay={introStartDelay + 0.6}>
+          <FadeInSection delay={introStartDelay + 0.28} duration={0.55}>
             <div className="space-y-0">
               <p className="text-xs sm:text-sm uppercase tracking-[0.32em] text-muted">
                 Leadership
@@ -138,7 +139,8 @@ export default function WorkPage() {
                 {leadershipItems.map((item, index) => (
                   <FadeInSection
                     key={`${item.title}-${item.company}-${item.date}`}
-                    delay={introStartDelay + 0.72 + index * 0.11}
+                    delay={introStartDelay + 0.34 + index * 0.08}
+                    duration={0.5}
                   >
                     <WorkExperienceItem
                       title={item.title}
@@ -158,19 +160,19 @@ export default function WorkPage() {
           </FadeInSection>
         </div>
 
-        <FadeInSection delay={introStartDelay + 0.9}>
+        <FadeInSection delay={introStartDelay + 0.46} duration={0.55}>
           <div>
             <ContributionGraph />
           </div>
         </FadeInSection>
 
-        <FadeInSection delay={introStartDelay + 1.03}>
+        <FadeInSection delay={introStartDelay + 0.42} duration={0.4}>
           <div>
             <ProjectsSection />
           </div>
         </FadeInSection>
 
-        <FadeInSection delay={introStartDelay + 1.15}>
+        <FadeInSection delay={introStartDelay + 0.5} duration={0.4}>
           <Footer />
         </FadeInSection>
       </section>

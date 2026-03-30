@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 interface FadeInSectionProps {
   children: ReactNode;
   delay?: number;
+  duration?: number;
   once?: boolean;
   amount?: number;
 }
@@ -13,6 +14,7 @@ interface FadeInSectionProps {
 export const FadeInSection = ({
   children,
   delay = 0,
+  duration = 1,
   once = true,
   amount = 0.2,
 }: FadeInSectionProps) => {
@@ -21,7 +23,7 @@ export const FadeInSection = ({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once, amount }}
-      transition={{ duration: 1, delay }}
+      transition={{ duration, delay }}
     >
       {children}
     </motion.div>
