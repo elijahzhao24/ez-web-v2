@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
@@ -11,7 +12,6 @@ type ProjectFilter = "featured" | "all" | "hackathons";
 interface ProjectItem {
   slug: string;
   title: string;
-  summary: string;
   note: string;
   image: StaticImageData;
   featured: boolean;
@@ -22,8 +22,6 @@ const PROJECTS: ProjectItem[] = [
   {
     slug: "athena-hq",
     title: "AthenaHQ",
-    summary:
-      "Built an end-to-end onboarding flow with TypeScript, React, and AI SDK to speed up customer setup.",
     note: "Backed by Y Combinator (W25)",
     image: tempImage,
     featured: true,
@@ -32,8 +30,6 @@ const PROJECTS: ProjectItem[] = [
   {
     slug: "blueprint-nfc",
     title: "BluePrint NFC",
-    summary:
-      "Shipped an NFC-based networking workflow and event check-in experience for high-volume campus events.",
     note: "CUS Conference of the Year 2025",
     image: tempImageTwo,
     featured: false,
@@ -61,6 +57,8 @@ function getCount(filter: ProjectFilter) {
 
 export default function ProjectsSection() {
   const [activeFilter, setActiveFilter] = useState<ProjectFilter>("featured");
+  const [activeHoverSlug, setActiveHoverSlug] = useState<string | null>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   const filteredProjects = useMemo(() => {
     if (activeFilter === "all") {
@@ -76,34 +74,32 @@ export default function ProjectsSection() {
 
   return (
     <div className="space-y-4">
-      <div className="space-y-0.5 text-center">
-        <p className="text-xs uppercase tracking-[0.32em] leading-none text-muted">
-          selected work
-        </p>
-        <h3 className="text-base font-medium leading-tight text-foreground sm:text-[1.5rem]">
+      <div className="space-y-2">
+        <p className="text-[1rem] uppercase tracking-[0.20em] leading-none text-muted">
           projects
-        </h3>
-      </div>
+        </p>
 
-      <div className="flex items-center gap-3 text-[0.96rem] sm:text-[1.02rem]">
-        {(Object.keys(FILTER_LABELS) as ProjectFilter[]).map((filter) => {
-          const isActive = activeFilter === filter;
-          return (
-            <button
-              key={filter}
-              type="button"
-              className={`transition-colors duration-150 ${
-                isActive
-                  ? "text-foreground"
-                  : "text-muted hover:text-foreground/80"
-              }`}
-              onClick={() => setActiveFilter(filter)}
-              aria-pressed={isActive}
-            >
-              {FILTER_LABELS[filter]} ({getCount(filter)})
-            </button>
-          );
-        })}
+        <div className="flex items-center gap-2 text-[0.96rem] leading-none tracking-[-0.01em] sm:text-[0.8rem]">
+          {(Object.keys(FILTER_LABELS) as ProjectFilter[]).map((filter) => {
+            const isActive = activeFilter === filter;
+            return (
+              <button
+                key={filter}
+                type="button"
+                className={`inline-flex items-baseline gap-[0.14em] font-normal transition-colors duration-150 ${
+                  isActive
+                    ? "text-foreground"
+                    : "text-muted hover:text-foreground/80"
+                }`}
+                onClick={() => setActiveFilter(filter)}
+                aria-pressed={isActive}
+              >
+                <span>{FILTER_LABELS[filter]}</span>
+                <span>({getCount(filter)})</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
@@ -111,31 +107,73 @@ export default function ProjectsSection() {
           <Link
             key={project.slug}
             href={`/project/${project.slug}`}
-            className="group block focus:outline-none"
+            className="group relative block focus:outline-none"
+            onMouseEnter={(event) => {
+              const rect = event.currentTarget.getBoundingClientRect();
+              setMousePosition({
+                x: rect.width / 2,
+                y: rect.height * 0.35,
+              });
+              setActiveHoverSlug(project.slug);
+            }}
+            onMouseLeave={() => setActiveHoverSlug(null)}
+            onMouseMove={(event) => {
+              const rect = event.currentTarget.getBoundingClientRect();
+              setMousePosition({
+                x: event.clientX - rect.left,
+                y: event.clientY - rect.top,
+              });
+            }}
+            onFocus={(event) => {
+              const rect = event.currentTarget.getBoundingClientRect();
+              setMousePosition({
+                x: rect.width / 2,
+                y: rect.height * 0.35,
+              });
+              setActiveHoverSlug(project.slug);
+            }}
+            onBlur={() => setActiveHoverSlug(null)}
           >
             <article className="space-y-2.5">
-              <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-border bg-surface/10">
+              <div className="relative aspect-[16/10] overflow-hidden border border-border bg-surface/10">
                 <Image
                   src={project.image}
                   alt={project.title}
                   fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                  className="object-cover transition duration-300 group-hover:scale-[1.02] group-hover:brightness-[0.82]"
                   sizes="(max-width: 640px) 100vw, 50vw"
                 />
+                <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/20" />
               </div>
 
-              <div className="space-y-1">
-                <h4 className="text-[1.04rem] leading-snug text-foreground sm:text-[1.18rem]">
+              <div className="space-y-0.5">
+                <h4 className="text-[0.80rem] leading-snug text-foreground sm:text-[0.8rem]">
                   {project.title}
                 </h4>
-                <p className="text-[0.95rem] leading-relaxed text-foreground/90">
-                  {project.summary}
-                </p>
-                <p className="text-[0.83rem] leading-relaxed text-muted">
+                <p className="text-[0.7rem] leading-relaxed text-muted">
                   {project.note}
                 </p>
               </div>
             </article>
+
+            <AnimatePresence>
+              {activeHoverSlug === project.slug ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.92 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.92 }}
+                  transition={{ duration: 0.14, ease: "easeOut" }}
+                  className="pointer-events-none absolute hidden sm:flex items-center rounded-full border border-border bg-background px-3 py-1.5 text-xs uppercase tracking-[0.12em] text-foreground shadow-lg"
+                  style={{
+                    left: mousePosition.x,
+                    top: mousePosition.y,
+                    transform: "translate(-50%, -145%)",
+                  }}
+                >
+                  View More
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
           </Link>
         ))}
       </div>

@@ -1,3 +1,7 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { TypeAnimation } from "react-type-animation";
 import ContributionGraph from "@/components/contribution_graph";
 import Footer from "@/components/footer";
 import ProjectsSection from "@/components/projects_section";
@@ -5,6 +9,11 @@ import WorkExperienceItem from "@/components/work_experience_item";
 import { FadeInSection } from "@/util/FadeInSection";
 
 export default function WorkPage() {
+  const headingText = "hi, i'm elijah";
+  const typewriterSpeed = 52;
+  const typewriterDuration = (headingText.length * typewriterSpeed) / 1000;
+  const introStartDelay = typewriterDuration + 0.18;
+
   const workItems = [
     {
       title: "Software Intern",
@@ -50,79 +59,118 @@ export default function WorkPage() {
 
   return (
     <main className="flex min-h-screen flex-col bg-background text-foreground nav container-width">
-      <section className="section w-full max-w-4xl space-y-8 sm:space-y-12">
+      <section className="w-full max-w-4xl space-y-8 pt-0 pb-6 sm:space-y-12 sm:pb-8">
         <header className="space-y-1.5">
-          <h1 className="text-[1.90rem] font-medium tracking-tight text-foreground sm:text-[2.35rem]">
-            hi, i&apos;m elijah
-          </h1>
-          <p className="text-sm leading-normal text-muted">
+          <motion.div
+            className="text-[1.90rem] font-medium tracking-tight text-foreground sm:text-[2.35rem]"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.38 }}
+          >
+            <TypeAnimation
+              sequence={[headingText]}
+              wrapper="h1"
+              cursor={true}
+              repeat={0}
+              speed={typewriterSpeed}
+              style={{ display: "inline-block" }}
+            />
+          </motion.div>
+
+          <motion.p
+            className="text-sm leading-normal text-muted"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: introStartDelay }}
+          >
             computer science @{" "}
             <span className="font-semibold text-foreground highlight">ubc</span>
-          </p>
-          <p className="max-w-3xl pt-1 text-[1.1rem] leading-tight font-light text-foreground sm:text-[1.5rem]">
+          </motion.p>
+          <motion.p
+            className="max-w-3xl pt-1 text-[1.1rem] leading-tight font-light text-foreground sm:text-[1.5rem]"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: introStartDelay + 0.14 }}
+          >
             i&apos;m interested in the future of how we{" "}
             <span className="highlight italic">interact</span> with the internet
             as AI becomes part of everyday workflows.
-          </p>
+          </motion.p>
         </header>
 
         <div className="space-y-4">
-          <div className="space-y-0">
-            <p className="text-xs sm:text-sm uppercase tracking-[0.32em] text-muted">
-              Work
-            </p>
-
+          <FadeInSection delay={introStartDelay + 0.3}>
             <div className="space-y-0">
-              {workItems.map((item, index) => (
-                <WorkExperienceItem
-                  key={`${item.title}-${item.company}-${item.date}`}
-                  title={item.title}
-                  company={item.company}
-                  date={item.date}
-                  href={item.href}
-                  details={item.details}
-                  showDivider={index > 0}
-                  accentCompany={item.accentCompany}
-                  showCursorBadge={item.showCursorBadge}
-                  cursorBadgeText={item.cursorBadgeText}
-                />
-              ))}
+              <p className="text-xs sm:text-sm uppercase tracking-[0.32em] text-muted">
+                Work
+              </p>
+
+              <div className="space-y-0">
+                {workItems.map((item, index) => (
+                  <FadeInSection
+                    key={`${item.title}-${item.company}-${item.date}`}
+                    delay={introStartDelay + 0.4 + index * 0.11}
+                  >
+                    <WorkExperienceItem
+                      title={item.title}
+                      company={item.company}
+                      date={item.date}
+                      href={item.href}
+                      details={item.details}
+                      showDivider={index > 0}
+                      accentCompany={item.accentCompany}
+                      showCursorBadge={item.showCursorBadge}
+                      cursorBadgeText={item.cursorBadgeText}
+                    />
+                  </FadeInSection>
+                ))}
+              </div>
             </div>
-          </div>
+          </FadeInSection>
 
-          <div className="space-y-0">
-            <p className="text-xs sm:text-sm uppercase tracking-[0.32em] text-muted">
-              Leadership
-            </p>
-
+          <FadeInSection delay={introStartDelay + 0.6}>
             <div className="space-y-0">
-              {leadershipItems.map((item, index) => (
-                <WorkExperienceItem
-                  key={`${item.title}-${item.company}-${item.date}`}
-                  title={item.title}
-                  company={item.company}
-                  date={item.date}
-                  href={item.href}
-                  details={item.details}
-                  showDivider={index > 0}
-                  accentCompany={item.accentCompany}
-                  showCursorBadge={item.showCursorBadge}
-                  cursorBadgeText={item.cursorBadgeText}
-                />
-              ))}
+              <p className="text-xs sm:text-sm uppercase tracking-[0.32em] text-muted">
+                Leadership
+              </p>
+
+              <div className="space-y-0">
+                {leadershipItems.map((item, index) => (
+                  <FadeInSection
+                    key={`${item.title}-${item.company}-${item.date}`}
+                    delay={introStartDelay + 0.72 + index * 0.11}
+                  >
+                    <WorkExperienceItem
+                      title={item.title}
+                      company={item.company}
+                      date={item.date}
+                      href={item.href}
+                      details={item.details}
+                      showDivider={index > 0}
+                      accentCompany={item.accentCompany}
+                      showCursorBadge={item.showCursorBadge}
+                      cursorBadgeText={item.cursorBadgeText}
+                    />
+                  </FadeInSection>
+                ))}
+              </div>
             </div>
+          </FadeInSection>
+        </div>
+
+        <FadeInSection delay={introStartDelay + 0.9}>
+          <div>
+            <ContributionGraph />
           </div>
-        </div>
+        </FadeInSection>
 
-        <div>
-          <ContributionGraph />
-        </div>
+        <FadeInSection delay={introStartDelay + 1.03}>
+          <div>
+            <ProjectsSection />
+          </div>
+        </FadeInSection>
 
-        <div>
-          <ProjectsSection />
-        </div>
-
-        <FadeInSection delay={0.8}>
+        <FadeInSection delay={introStartDelay + 1.15}>
           <Footer />
         </FadeInSection>
       </section>
