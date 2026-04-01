@@ -1,0 +1,66 @@
+import ProjectHeader from "../project_header";
+import nbasalary from "@/app/images/nbasalary.webp";
+
+export const metadata = {
+  title: "NBA Salary | Project",
+  description: "Project overview for NBA Salary",
+};
+
+<main className="flex min-h-screen flex-col bg-background text-foreground nav container-width font-sans">
+  <section className="w-full max-w-4xl space-y-8 pt-0 pb-6 font-sans sm:pb-8">
+    <ProjectHeader
+      title="NBA Salary"
+      role="Software Engineer"
+      year="2025"
+      imageSrc={nbasalary}
+      imageAlt="NBA Salary dashboard and team cap visualization"
+      description="A full stack CRUD application that graphically displays the salary cap of each NBA team with a user-friendly interface and responsive design."
+      techStack={[
+        "Spring Boot",
+        "Spring Data JPA",
+        "Java",
+        "PostgreSQL",
+        "Python",
+        "Supabase",
+        "beautifulsoup",
+        "React",
+        "TailwindCSS",
+      ]}
+      sourceCodeUrl="https://github.com/elijahzhao24/NBAsalary"
+      websiteUrl="https://nbasalary.vercel.app/"
+    />
+
+    <hr className="border-border" />
+
+
+    <div className="space-y-3 text-[0.98rem] leading-relaxed text-muted font-[450] sm:text-[1.05rem]">
+      <span className="block text-xs uppercase tracking-[0.25em] text-muted sm:text-[0.6rem]">
+        overview
+      </span>
+      <p>
+        NBAsalary is a full-stack project designed to scrape salary statistics
+        and photos for over 500 players, then dynamically manipulate and
+        present team salary cap data in a graphical way.
+      </p>
+      <ul className="list-disc space-y-1 pl-5">
+        <li>
+          Data Scraping: Built a Python + Beautiful Soup scraper and uploaded
+          500+ player salary/image records directly to Postgres with psycopg2.
+        </li>
+        <li>
+          Backend: Built Spring Boot REST APIs with Spring Data JPA for paging,
+          sorting, and dynamic filtering across rosters and stats.
+        </li>
+        <li>
+          Database: Managed real-time salary data manipulation with SQL on
+          Postgres hosted through Supabase.
+        </li>
+        <li>
+          Frontend: Built a React + Tailwind interface for salary-cap
+          visualizations, deployed on Vercel with environment variables and
+          backend CORS configuration.
+        </li>
+      </ul>
+    </div>
+  </section>
+</main>

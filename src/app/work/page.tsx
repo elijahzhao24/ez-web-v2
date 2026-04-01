@@ -18,7 +18,7 @@ export default function WorkPage() {
     {
       title: "Software Intern",
       company: "Nexera Robotics",
-      date: "Summer 2026",
+      date: "Winter 2026",
       href: "https://www.nexera-robotics.com/",
       details: [
         "Developing robotic grasping solutions that enable robots to reliably handle diverse, unstructured, and delicate objects.",
@@ -45,7 +45,7 @@ export default function WorkPage() {
     {
       title: "Development Lead",
       company: "UBC BizTech",
-      date: "2025-Present ",
+      date: "Aug 2025-Present ",
       href: "https://www.ubcbiztech.com/",
       details: [
         "Developing event features that elevate the experience of our 800+ members.",

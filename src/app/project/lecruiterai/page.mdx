@@ -1,0 +1,27 @@
+import ProjectHeader from "../project_header";
+import lecruiter from "@/app/images/lecruiter.webp";
+
+export const metadata = {
+  title: "AthenaHQ | Project",
+  description: "Project overview for AthenaHQ",
+};
+
+<main className="flex min-h-screen flex-col bg-background text-foreground nav container-width font-sans">
+  <section className="w-full max-w-4xl space-y-8 pt-0 pb-6 font-sans sm:pb-8">
+    <ProjectHeader
+      title="LeCruiter AI"
+      role="Software Engineer"
+      year="2025"
+      imageSrc={lecruiter}
+      imageAlt="AthenaHQ onboarding interface"
+      description="AI-powered platform enabling users to practice both behavioral and technical interviews, delivering generative prompts, realistic feedback, and automated scoring"
+      sourceCodeUrl="https://github.com/R0yZh3ng/CIC-GenAI-Hackathon"
+    />
+
+    <hr className="border-border" />
+
+    <div className="text-[0.98rem] leading-relaxed text-muted font-[450] sm:text-[1.05rem]">
+      More info coming soon
+    </div>
+  </section>
+</main>

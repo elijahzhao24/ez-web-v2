@@ -35,20 +35,14 @@ const SLIDES: Slide[] = [
   {
     id: 3,
     image: hackathons,
-    header: "Hackathons, Pitches, and Competitions",
-    description: "Trying my best to stack wins",
+    header: "Hackathons and Competitions",
+    description: '"terrorizing" the hackathon scene. Had a 2 win streak at some point',
   },
   {
     id: 4,
     image: tempImage,
     header: "header 4",
     description: "description 4",
-  },
-  {
-    id: 5,
-    image: tempImage,
-    header: "header 5",
-    description: "description 5",
   },
 ];
 

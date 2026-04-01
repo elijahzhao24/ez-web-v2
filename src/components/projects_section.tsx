@@ -4,7 +4,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import tempImage from "@/app/temp.jpg";
+import lecruiter from "@/app/images/lecruiter.webp";
+import nbasalary from "@/app/images/nbasalary.webp";
 import tempImageTwo from "@/app/temp2.png";
 
 type ProjectFilter = "featured" | "all" | "hackathons";
@@ -20,10 +21,18 @@ interface ProjectItem {
 
 const PROJECTS: ProjectItem[] = [
   {
-    slug: "athena-hq",
-    title: "AthenaHQ",
-    note: "Backed by Y Combinator (W25)",
-    image: tempImage,
+    slug: "lecruiterai",
+    title: "leCruiter AI",
+    note: "Practice software interviews with Lebron",
+    image: lecruiter,
+    featured: true,
+    hackathon: true,
+  },
+  {
+    slug: "nbasalary",
+    title: "NBA Salary",
+    note: "Interactive salary cap visualizer for all NBA teams",
+    image: nbasalary,
     featured: true,
     hackathon: false,
   },
