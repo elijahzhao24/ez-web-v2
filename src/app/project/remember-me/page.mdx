@@ -1,0 +1,63 @@
+import ProjectHeader from "../project_header";
+import rememberMe from "@/app/images/projects/remeberMe.webp";
+
+export const metadata = {
+  title: "Remember Me | Project",
+  description: "Project overview for Remember Me",
+};
+
+<main className="flex min-h-screen flex-col bg-background text-foreground nav container-width font-sans">
+  <section className="w-full max-w-4xl space-y-8 pt-0 pb-6 font-sans sm:pb-8">
+    <ProjectHeader
+      title="Remember Me"
+      role="Software Engineer"
+      year="2025"
+      imageSrc={rememberMe}
+      imageAlt="Remember Me assistive camera companion interface"
+      description="An assistive camera companion that uses computer vision to recognize familiar faces and announce names, relationships, and reminders, helping Alzheimer's patients stay connected with those around them."
+      techStack={[
+        "React Native",
+        "TailwindCSS",
+        "Python",
+        "Flask",
+        "DynamoDB",
+        "AWS S3",
+        "AWS Rekognition",
+      ]}
+      sourceCodeUrl="https://github.com/LeCruitUsPls/AlzheimerCamera"
+      websiteUrl="https://devpost.com/software/remember-me-e6pyuv"
+      websiteLabel="View on Devpost"
+    />
+
+    <hr className="border-border" />
+
+    <div className="space-y-3 text-[0.98rem] leading-relaxed text-muted font-[450] sm:text-[1.05rem]">
+      <span className="block text-xs uppercase tracking-[0.25em] text-muted sm:text-[0.6rem]">
+        {"overview"}
+      </span>
+      <p>
+        {
+          "Remember Me was built to reduce social disconnection for people living with Alzheimer's by giving real-time identity context through a wearable camera system and voice feedback."
+        }
+      </p>
+      <ul className="list-disc space-y-1 pl-5">
+        <li>
+          Integrated computer vision with AWS Rekognition to match faces against
+          known contacts.
+        </li>
+        <li>
+          Built a Python + Flask backend to orchestrate recognition requests and
+          return contextual reminders.
+        </li>
+        <li>
+          Used DynamoDB and S3 to store profiles, relationship metadata, and
+          media assets.
+        </li>
+        <li>
+          Implemented a React Native client experience focused on lightweight,
+          accessible real-time guidance.
+        </li>
+      </ul>
+    </div>
+  </section>
+</main>

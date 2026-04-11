@@ -4,9 +4,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import lecruiter from "@/app/images/lecruiter.webp";
-import nbasalary from "@/app/images/nbasalary.webp";
-import tempImageTwo from "@/app/temp2.png";
+import kickfund from "@/app/images/projects/kickfund.webp";
+import lecruiter from "@/app/images/projects/lecruiter.webp";
+import nbasalary from "@/app/images/projects/nbasalary.webp";
+import rememberMe from "@/app/images/projects/remeberMe.webp";
 
 type ProjectFilter = "featured" | "all" | "hackathons";
 
@@ -37,12 +38,20 @@ const PROJECTS: ProjectItem[] = [
     hackathon: false,
   },
   {
-    slug: "blueprint-nfc",
-    title: "BluePrint NFC",
-    note: "CUS Conference of the Year 2025",
-    image: tempImageTwo,
-    featured: false,
+    slug: "remember-me",
+    title: "Remember Me",
+    note: "Assistive camera companion for Alzheimer's care",
+    image: rememberMe,
+    featured: true,
     hackathon: true,
+  },
+  {
+    slug: "kickfund",
+    title: "KickFund",
+    note: "Investment market judging system for UBC KickStart",
+    image: kickfund,
+    featured: true,
+    hackathon: false,
   },
 ];
 

@@ -1,0 +1,61 @@
+import Image from "next/image";
+import ProjectHeader from "../project_header";
+import kickfund from "@/app/images/projects/kickfund.webp";
+import designDocOne from "./designdoc1.webp";
+import designDocTwo from "./designdoc2.webp";
+
+export const metadata = {
+  title: "KickFund | Project",
+  description: "Project overview for KickFund",
+};
+
+<main className="flex min-h-screen flex-col bg-background text-foreground nav container-width font-sans">
+  <section className="w-full max-w-4xl space-y-8 pt-0 pb-6 font-sans sm:pb-8">
+    <ProjectHeader
+      title="KickFund"
+      role="Software Engineer"
+      year="2025"
+      imageSrc={kickfund}
+      imageAlt="KickFund investment market interface"
+      description="Designing an investment market as a judging metric for UBC's KickStart startup competition. We designed a mock investment platform for KickStart participants to receive feedback from judges and improve their pitches. Students were able to invest in each other's startups using a mock currency and receive feedback from judges on their pitches in real time."
+      techStack={[
+        "AWS DynamoDB",
+        "AWS API Gateway",
+        "AWS Lambda",
+        "Next.js",
+      ]}
+    />
+
+    <hr className="border-border" />
+
+    <div className="space-y-3">
+      <div className="relative aspect-[16/10] overflow-hidden border border-border/35 bg-surface/10">
+        <Image
+          src={designDocOne}
+          alt="KickFund design document one"
+          fill
+          className="object-cover"
+          sizes="(max-width: 640px) 100vw, 50vw"
+        />
+      </div>
+      
+      <div className="relative aspect-[16/10] overflow-hidden border border-border/35 bg-surface/10">
+        <Image
+          src={designDocTwo}
+          alt="KickFund design document two"
+          fill
+          className="object-cover"
+          sizes="(max-width: 640px) 100vw, 50vw"
+        />
+      </div>
+
+      <div className="text-[0.72rem] text-muted">
+        <span>(high level archtetual flow of core features)</span>
+      </div>
+
+      <div className="text-[0.98rem] leading-relaxed text-muted font-[450] sm:text-[1.05rem]">
+        <span>this section is still being worked on.</span>
+      </div>
+    </div>
+  </section>
+</main>

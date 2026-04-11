@@ -122,7 +122,7 @@ export default function ProjectHeader({
 
       <motion.div
         variants={itemVariants}
-        className="relative aspect-[16/10] overflow-hidden bg-surface/10"
+        className="relative aspect-[16/10] overflow-hidden border border-border/35 bg-surface/10"
       >
         <Image
           src={imageSrc}
