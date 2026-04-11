@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { TypeAnimation } from "react-type-animation";
 import ContributionGraph from "@/components/contribution_graph";
 import Footer from "@/components/footer";
@@ -9,10 +11,28 @@ import WorkExperienceItem from "@/components/work_experience_item";
 import { FadeInSection } from "@/util/FadeInSection";
 
 export default function WorkPage() {
+  const searchParams = useSearchParams();
   const headingText = "hi, i'm Elijah";
   const typewriterSpeed = 52;
   const typewriterDuration = (headingText.length * typewriterSpeed) / 1000;
   const introStartDelay = typewriterDuration + 0.12;
+  const projectsDelay = introStartDelay + 0.22;
+
+  useEffect(() => {
+    if (searchParams.get("scroll") !== "projects") {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      document.getElementById("projects")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      window.history.replaceState(null, "", "/work");
+    }, 800);
+
+    return () => window.clearTimeout(timer);
+  }, [searchParams]);
 
   const workItems = [
     {
@@ -166,7 +186,7 @@ export default function WorkPage() {
           </div>
         </FadeInSection>
 
-        <FadeInSection delay={introStartDelay + 0.42} duration={0.4}>
+        <FadeInSection delay={projectsDelay} duration={0.32}>
           <div>
             <ProjectsSection />
           </div>

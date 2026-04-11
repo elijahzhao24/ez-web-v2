@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { useMemo, useRef, useState } from "react";
 import { useTheme } from "@/context/themeProvider";
 import { useSpotify } from "@/hooks/useSpotify";
@@ -37,7 +37,7 @@ const SpotifyEmbed = ({ className, link, wide = false }: SpotifyEmbedProps) => (
   </div>
 );
 
-const smallListVariants = {
+const smallListVariants: Variants = {
   hidden: {
     opacity: 1,
   },
@@ -57,7 +57,7 @@ const smallListVariants = {
   },
 };
 
-const smallItemVariants = {
+const smallItemVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 26,

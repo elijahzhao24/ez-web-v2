@@ -4,9 +4,11 @@ import Image, { type StaticImageData } from "next/image";
 import { useEffect, useState } from "react";
 
 import tempImage from "@/app/temp.jpg";
-import biztech from "@/app/images/biztech.jpg";
+import biztech from "@/app/images/biztech2.jpg";
 import nexera from "@/app/images/nexera.webp";
-import hackathons from "@/app/images/hackathons.webp";
+import hackathons from "@/app/images/bizbotwin.jpg";
+import suits from "@/app/images/suits.webp";
+import ski from "@/app/images/ski.webp";
 
 type Slide = {
   id: number;
@@ -36,13 +38,13 @@ const SLIDES: Slide[] = [
     id: 3,
     image: hackathons,
     header: "Hackathons and Competitions",
-    description: '"terrorizing" the hackathon scene. Had a 2 win streak at some point',
+    description: 'building and organizing hackathons, recent win at NwHacks',
   },
   {
     id: 4,
-    image: tempImage,
-    header: "header 4",
-    description: "description 4",
+    image: ski,
+    header: "Touching Grass 🌲",
+    description: "doing random things; right now thats skiing, golf, and reading",
   },
 ];
 

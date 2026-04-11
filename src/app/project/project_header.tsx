@@ -1,5 +1,9 @@
+"use client";
+
+import { motion, type Variants } from "framer-motion";
 import Image, { type StaticImageData } from "next/image";
-import type { ReactNode } from "react";
+import Link from "next/link";
+import type { ReactElement } from "react";
 
 interface ProjectHeaderProps {
   title: string;
@@ -20,6 +24,32 @@ const META_ITEMS = [
   { label: "Role", key: "role" },
   { label: "Year", key: "year" },
 ] as const;
+
+interface ProjectLink {
+  href: string;
+  label: string;
+  icon: ReactElement;
+}
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.08,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.34, ease: "easeOut" },
+  },
+};
 
 export default function ProjectHeader({
   title,
@@ -50,26 +80,50 @@ export default function ProjectHeader({
           icon: <GlobeIcon />,
         }
       : null,
-  ].filter((item): item is { href: string; label: string; icon: ReactNode } =>
-    Boolean(item),
-  );
+  ].filter((item): item is ProjectLink => item !== null);
 
   return (
-    <div className="space-y-5 sm:space-y-6">
-      <div className="flex max-w-[34rem] items-start gap-2 sm:gap-8">
-        {META_ITEMS.map((item) => (
-          <div key={item.key} className="shrink-0 space-y-0.5">
-            <span className="block text-xs uppercase tracking-[0.32em] text-muted sm:text-[0.6rem]">
-              {item.label}
-            </span>
-            <h2 className="text-[0.76rem] font-normal leading-tight tracking-[-0.01em] text-foreground sm:text-[0.9rem]">
-              {values[item.key]}
-            </h2>
-          </div>
-        ))}
-      </div>
+    <motion.div
+      className="relative space-y-5 sm:space-y-6"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
+      <motion.div
+        variants={itemVariants}
+        className="absolute top-0 right-0 z-10"
+      >
+        <Link
+          href="/work?scroll=projects"
+          aria-label="Close project and return to work projects"
+          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-foreground/30 bg-background/90 text-foreground shadow-sm backdrop-blur transition-colors hover:bg-foreground hover:text-background"
+        >
+          <CloseIcon />
+        </Link>
+      </motion.div>
 
-      <div className="relative aspect-[16/10] overflow-hidden bg-surface/10">
+      <motion.div
+        variants={itemVariants}
+        className="flex items-start gap-2 pr-12 sm:gap-4"
+      >
+        <div className="flex min-w-0 max-w-[34rem] flex-1 items-start gap-2 sm:gap-8">
+          {META_ITEMS.map((item) => (
+            <div key={item.key} className="shrink-0 space-y-0.5">
+              <span className="block text-xs uppercase tracking-[0.32em] text-muted sm:text-[0.6rem]">
+                {item.label}
+              </span>
+              <h2 className="text-[0.76rem] font-normal leading-tight tracking-[0.02em] text-foreground sm:text-[0.9rem]">
+                {values[item.key]}
+              </h2>
+            </div>
+          ))}
+        </div>
+      </motion.div>
+
+      <motion.div
+        variants={itemVariants}
+        className="relative aspect-[16/10] overflow-hidden bg-surface/10"
+      >
         <Image
           src={imageSrc}
           alt={imageAlt}
@@ -78,14 +132,20 @@ export default function ProjectHeader({
           priority
           sizes="(max-width: 768px) 100vw, 60vw"
         />
-      </div>
+      </motion.div>
 
-      <p className="max-w-[44rem] text-[1.04rem] leading-[1.5] tracking-[-0.01em] text-foreground/95 font-[400] sm:text-[1.1rem]">
+      <motion.p
+        variants={itemVariants}
+        className="max-w-[44rem] text-[1.04rem] leading-[1.5] tracking-[-0.01em] text-foreground/95 font-[400] sm:text-[1.1rem]"
+      >
         {description}
-      </p>
+      </motion.p>
 
       {techStack && techStack.length > 0 && (
-        <ul className="flex w-full max-w-[44rem] flex-wrap gap-1.5">
+        <motion.ul
+          variants={itemVariants}
+          className="flex w-full max-w-[44rem] flex-wrap gap-1.5"
+        >
           {techStack.map((item) => (
             <li
               key={item}
@@ -94,11 +154,14 @@ export default function ProjectHeader({
               {item}
             </li>
           ))}
-        </ul>
+        </motion.ul>
       )}
 
       {links.length > 0 && (
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+        <motion.div
+          variants={itemVariants}
+          className="flex flex-wrap items-center gap-x-4 gap-y-2"
+        >
           {links.map((link) => (
             <a
               key={link.href}
@@ -111,9 +174,9 @@ export default function ProjectHeader({
               <span>{link.label}</span>
             </a>
           ))}
-        </div>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 }
 
@@ -148,6 +211,20 @@ function GlobeIcon() {
     >
       <circle cx="12" cy="12" r="9" />
       <path d="M3 12h18M12 3a13 13 0 0 1 0 18M12 3a13 13 0 0 0 0 18" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-3.5 w-3.5 stroke-current"
+      strokeWidth="2.1"
+      fill="none"
+    >
+      <path d="M6 6l12 12M18 6L6 18" />
     </svg>
   );
 }

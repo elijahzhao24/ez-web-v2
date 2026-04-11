@@ -82,7 +82,7 @@ export default function ProjectsSection() {
   }, [activeFilter]);
 
   return (
-    <div className="space-y-4">
+    <div id="projects" className="space-y-4 scroll-mt-24">
       <div className="space-y-2">
         <p className="text-[1rem] uppercase tracking-[0.20em] leading-none text-muted">
           projects
