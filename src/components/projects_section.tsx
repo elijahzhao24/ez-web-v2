@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import bizbot from "@/app/images/projects/bizbot.png";
 import kickfund from "@/app/images/projects/kickfund.webp";
 import lecruiter from "@/app/images/projects/lecruiter.webp";
 import nbasalary from "@/app/images/projects/nbasalary.webp";
@@ -52,6 +53,14 @@ const PROJECTS: ProjectItem[] = [
     image: kickfund,
     featured: true,
     hackathon: false,
+  },
+  {
+    slug: "bizbot",
+    title: "BizBot",
+    note: "An autonomous event photography robot",
+    image: bizbot,
+    featured: true,
+    hackathon: true,
   },
 ];
 

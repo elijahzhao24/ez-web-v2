@@ -7,7 +7,8 @@ import type { ReactElement } from "react";
 
 interface ProjectHeaderProps {
   title: string;
-  role: string;
+  projectRole?: string;
+  role?: string;
   year: string;
   imageSrc: StaticImageData;
   imageAlt: string;
@@ -53,6 +54,7 @@ const itemVariants: Variants = {
 
 export default function ProjectHeader({
   title,
+  projectRole,
   role,
   year,
   imageSrc,
@@ -64,7 +66,8 @@ export default function ProjectHeader({
   websiteUrl,
   websiteLabel,
 }: ProjectHeaderProps) {
-  const values = { title, role, year };
+  const resolvedRole = projectRole ?? role ?? "";
+  const values = { title, role: resolvedRole, year };
   const links = [
     sourceCodeUrl
       ? {

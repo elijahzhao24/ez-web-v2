@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lora:opsz,wght@6..72,400..700&display=swap");
 @import "tailwindcss";
 
 :root {
@@ -41,6 +42,7 @@
   --color-nav-text: var(--nav-text);
   --color-nav-text-hover: var(--nav-text-hover);
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-serif: "Lora Variable", "Lora", ui-serif, Georgia, serif;
   --font-mono: var(--font-geist-mono);
 }
 
@@ -106,6 +108,51 @@ html.dark {
 
   .card {
     @apply transition-all duration-200;
+  }
+
+  .project-section-header {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  @media (min-width: 640px) {
+    .project-section-header {
+      font-size: 0.7rem;
+    }
+  }
+
+  .project-bold-header {
+    font-weight: 550;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--foreground);
+  }
+
+  @media (min-width: 640px) {
+    .project-bold-header {
+      font-size: 1.5rem;
+    }
+  }
+
+  .project-body-text {
+    color: var(--muted);
+    font-weight: 415;
+  }
+
+  .project-body-text > p,
+  .project-body-text li {
+    font-size: 0.85rem;
+    line-height: 1.625;
+  }
+
+  @media (min-width: 640px) {
+    .project-body-text > p,
+    .project-body-text li {
+      font-size: 0.95rem;
+    }
   }
 }
 
