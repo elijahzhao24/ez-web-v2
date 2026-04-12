@@ -1,0 +1,57 @@
+import ProjectHeader from "../project_header";
+import bucsFighter from "@/app/images/projects/bucsFighter.webp";
+
+export const metadata = {
+  title: "BUCS Fighter | Project",
+  description: "Project overview for BUCS Fighter",
+};
+
+<main className="flex min-h-screen flex-col bg-background text-foreground nav container-width font-sans">
+  <section className="w-full max-w-4xl space-y-8 pt-0 pb-6 font-sans sm:pb-8">
+    <ProjectHeader
+      title="BUCS Fighter"
+      projectRole="Software Engineer"
+      year="2025"
+      imageSrc={bucsFighter}
+      imageAlt="BUCS Fighter gameplay preview"
+      description="A Super Smash Bros style game using BUCS characters. Play different maps, characters, and use different fighting moves like punches, kicks, and smash attacks."
+      techStack={[
+        "Node.js",
+        "TypeScript",
+        "Socket.IO",
+        "Vercel",
+        "Render",
+      ]}
+      sourceCodeUrl="https://github.com/jjohngrey/bucs-fighter"
+      websiteUrl="https://bucs-fighter-deploy-game-client.vercel.app/"
+      websiteLabel="Play Live"
+    />
+
+    <hr className="border-border" />
+
+    <div className="space-y-3 text-[0.98rem] leading-relaxed text-muted font-[450] sm:text-[1.05rem]">
+      <span className="block text-xs uppercase tracking-[0.25em] text-muted sm:text-[0.6rem]">
+        {"overview"}
+      </span>
+      <p>
+        Was built using a distinct game client (handles rendering, player
+        controls, and UI), server (authoritative game and player state, runs
+        match services, combat logic), and shared packages (gameplay constants,
+        stage rules, core data models).
+      </p>
+      <p>
+        Won second place at the BUCS 2026 Hackathon.
+      </p>
+      <p>
+        <a
+          href="https://devpost.com/software/bucs-fighter"
+          target="_blank"
+          rel="noreferrer"
+          className="text-foreground/90 underline underline-offset-2 transition-colors hover:text-foreground"
+        >
+          View on Devpost
+        </a>
+      </p>
+    </div>
+  </section>
+</main>

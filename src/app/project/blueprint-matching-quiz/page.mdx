@@ -1,0 +1,33 @@
+import ProjectHeader from "../project_header";
+import blueprintProjectHeader from "./blueprint-project-header.webp";
+
+export const metadata = {
+  title: "Blueprint Matching Quiz | Project",
+  description: "Project overview for Blueprint Matching Quiz",
+};
+
+<main className="flex min-h-screen flex-col bg-background text-foreground nav container-width font-sans">
+  <section className="w-full max-w-4xl space-y-8 pt-0 pb-6 font-sans sm:pb-8">
+    <ProjectHeader
+      title="Blueprint Matching Quiz"
+      projectRole="Software Engineer"
+      year="2026"
+      imageSrc={blueprintProjectHeader}
+      imageAlt="Blueprint Matching Quiz project preview"
+      description="Matching 200 students with networking delegates using cosine similarity algorithms. We made it easier to achieve your goals by matching you with the right people. Ingesting registration data and personality traits from an interactive kiosk quiz enabled us to recommend students to networking delegates using cosine similarity algorithms."
+      techStack={["Algolia", "DynamoDB", "AWS Lambda", "Next.js"]}
+      sourceCodeUrl="https://github.com/ubc-biztech/bt-web-v2"
+      websiteUrl="https://www.ubcbiztech.com/events/blueprint2026"
+      websiteLabel="Find out more"
+    />
+
+    <hr className="border-border" />
+
+    <div className="space-y-3 text-[0.98rem] leading-relaxed text-muted font-[450] sm:text-[1.05rem]">
+      <span className="block text-xs uppercase tracking-[0.25em] text-muted sm:text-[0.6rem]">
+        {"overview"}
+      </span>
+      <p>This case study is a work in progress. Check back soon for updates!</p>
+    </div>
+  </section>
+</main>

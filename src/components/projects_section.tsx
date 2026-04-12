@@ -5,9 +5,11 @@ import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import bizbot from "@/app/images/projects/bizbot.png";
+import bucsFighter from "@/app/images/projects/bucsFighter.webp";
 import kickfund from "@/app/images/projects/kickfund.webp";
 import lecruiter from "@/app/images/projects/lecruiter.webp";
 import nbasalary from "@/app/images/projects/nbasalary.webp";
+import blueprintMatchingQuiz from "@/app/images/projects/project-blueprint.webp";
 import rememberMe from "@/app/images/projects/remeberMe.webp";
 
 type ProjectFilter = "featured" | "all" | "hackathons";
@@ -61,6 +63,22 @@ const PROJECTS: ProjectItem[] = [
     image: bizbot,
     featured: true,
     hackathon: true,
+  },
+  {
+    slug: "bucs-fighter",
+    title: "BUCS Fighter",
+    note: "Super smash bros but with BUCS characters.",
+    image: bucsFighter,
+    featured: true,
+    hackathon: true,
+  },
+  {
+    slug: "blueprint-matching-quiz",
+    title: "Blueprint Matching Quiz",
+    note: "Matching 200 students with networking delegates using cosine similarity algorithms.",
+    image: blueprintMatchingQuiz,
+    featured: true,
+    hackathon: false,
   },
 ];
 
