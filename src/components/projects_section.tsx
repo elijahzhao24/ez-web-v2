@@ -4,16 +4,18 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import bizbot from "@/app/images/projects/bizbot.png";
+import bizbot from "@/app/images/projects/bizbotprofile.png";
 import bucsFighter from "@/app/images/projects/bucsFighter.webp";
+import connectFour from "@/app/images/projects/connectfour.webp";
 import datasetProject from "@/app/images/projects/dataset_project.png";
 import kickfund from "@/app/images/projects/kickfund.webp";
 import lecruiter from "@/app/images/projects/lecruiter.webp";
 import nbasalary from "@/app/images/projects/nbasalary.webp";
 import blueprintMatchingQuiz from "@/app/images/projects/project-blueprint.webp";
+import pvzClone from "@/app/images/projects/pvzclone.webp";
 import rememberMe from "@/app/images/projects/remeberMe.webp";
 
-type ProjectFilter = "featured" | "all" | "hackathons";
+type ProjectFilter = "featured" | "all" | "hackathons" | "production";
 
 interface ProjectItem {
   slug: string;
@@ -22,41 +24,11 @@ interface ProjectItem {
   image: StaticImageData;
   featured: boolean;
   hackathon: boolean;
+  production: boolean;
+  badgeText?: string;
 }
 
 const PROJECTS: ProjectItem[] = [
-  {
-    slug: "lecruiterai",
-    title: "leCruiter AI",
-    note: "Practice software interviews with Lebron",
-    image: lecruiter,
-    featured: true,
-    hackathon: true,
-  },
-  {
-    slug: "nbasalary",
-    title: "NBA Salary",
-    note: "Interactive salary cap visualizer for all NBA teams",
-    image: nbasalary,
-    featured: true,
-    hackathon: false,
-  },
-  {
-    slug: "remember-me",
-    title: "Remember Me",
-    note: "Assistive camera companion for Alzheimer's care",
-    image: rememberMe,
-    featured: true,
-    hackathon: true,
-  },
-  {
-    slug: "kickfund",
-    title: "KickFund",
-    note: "Investment market judging system for UBC KickStart",
-    image: kickfund,
-    featured: true,
-    hackathon: false,
-  },
   {
     slug: "bizbot",
     title: "BizBot",
@@ -64,22 +36,8 @@ const PROJECTS: ProjectItem[] = [
     image: bizbot,
     featured: true,
     hackathon: true,
-  },
-  {
-    slug: "bucs-fighter",
-    title: "BUCS Fighter",
-    note: "Super smash bros but with BUCS characters.",
-    image: bucsFighter,
-    featured: true,
-    hackathon: true,
-  },
-  {
-    slug: "blueprint-matching-quiz",
-    title: "Blueprint Matching Quiz",
-    note: "Matching 200 students with networking delegates using cosine similarity algorithms.",
-    image: blueprintMatchingQuiz,
-    featured: true,
-    hackathon: false,
+    production: false,
+    badgeText: "winner 🏆",
   },
   {
     slug: "dataset-curation-pipeline",
@@ -88,6 +46,80 @@ const PROJECTS: ProjectItem[] = [
     image: datasetProject,
     featured: true,
     hackathon: false,
+    production: true,
+  },
+  {
+    slug: "kickfund",
+    title: "KickFund",
+    note: "Investment market judging system for UBC KickStart",
+    image: kickfund,
+    featured: true,
+    hackathon: false,
+    production: true,
+  },
+  {
+    slug: "bucs-fighter",
+    title: "BUCS Fighter",
+    note: "Super smash bros but with BUCS characters.",
+    image: bucsFighter,
+    featured: true,
+    hackathon: true,
+    production: false,
+    badgeText: "winner 🏆",
+  },
+  {
+    slug: "blueprint-matching-quiz",
+    title: "Blueprint Matching Quiz",
+    note: "Matching 200 students with networking delegates using cosine similarity algorithms.",
+    image: blueprintMatchingQuiz,
+    featured: true,
+    hackathon: false,
+    production: true,
+  },
+  {
+    slug: "lecruiterai",
+    title: "leCruiter AI",
+    note: "Practice software interviews with Lebron",
+    image: lecruiter,
+    featured: false,
+    hackathon: true,
+    production: false,
+  },
+  {
+    slug: "nbasalary",
+    title: "NBA Salary",
+    note: "Interactive salary cap visualizer for all NBA teams",
+    image: nbasalary,
+    featured: true,
+    hackathon: false,
+    production: true,
+  },
+  {
+    slug: "remember-me",
+    title: "Remember Me",
+    note: "Assistive camera companion for Alzheimer's care",
+    image: rememberMe,
+    featured: false,
+    hackathon: true,
+    production: false,
+  },
+  {
+    slug: "connect-four-ai",
+    title: "Connect Four AI",
+    note: "Minimax AI opponent with alpha-beta pruning.",
+    image: connectFour,
+    featured: false,
+    hackathon: false,
+    production: false,
+  },
+  {
+    slug: "pvz-clone",
+    title: "Plants Vs. Zombies Clone",
+    note: "Gameplay clone with a story mode and endless mode.",
+    image: pvzClone,
+    featured: false,
+    hackathon: false,
+    production: true,
   },
 ];
 
@@ -95,6 +127,7 @@ const FILTER_LABELS: Record<ProjectFilter, string> = {
   featured: "Featured",
   all: "All",
   hackathons: "Hackathons",
+  production: "Production",
 };
 
 function getCount(filter: ProjectFilter) {
@@ -104,6 +137,10 @@ function getCount(filter: ProjectFilter) {
 
   if (filter === "featured") {
     return PROJECTS.filter((project) => project.featured).length;
+  }
+
+  if (filter === "production") {
+    return PROJECTS.filter((project) => project.production).length;
   }
 
   return PROJECTS.filter((project) => project.hackathon).length;
@@ -121,6 +158,10 @@ export default function ProjectsSection() {
 
     if (activeFilter === "featured") {
       return PROJECTS.filter((project) => project.featured);
+    }
+
+    if (activeFilter === "production") {
+      return PROJECTS.filter((project) => project.production);
     }
 
     return PROJECTS.filter((project) => project.hackathon);
@@ -217,6 +258,11 @@ export default function ProjectsSection() {
                       className="object-cover transition duration-300 group-hover:scale-[1.02] group-hover:brightness-[0.82]"
                       sizes="(max-width: 640px) 100vw, 50vw"
                     />
+                    {project.badgeText ? (
+                      <span className="pointer-events-none absolute right-2 top-2 z-10 rounded-full border border-white/25 bg-black/58 px-2.5 py-1 text-[0.62rem] font-medium leading-none tracking-[0.02em] text-white backdrop-blur-sm">
+                        {project.badgeText}
+                      </span>
+                    ) : null}
                     <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/20" />
                   </div>
 

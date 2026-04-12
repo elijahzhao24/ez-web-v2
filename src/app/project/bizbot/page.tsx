@@ -13,7 +13,7 @@ export default function BizBotPage() {
         <ProjectHeader
           title="BizBot"
           projectRole="Software Engineer"
-          year="2025"
+          year="2026"
           imageSrc={bizbot}
           imageAlt="BizBot autonomous event photographer interface"
           description="BIZBOT is an autonomous event photography robot that roams venues, detects interesting scenes, and captures candid moments. It uses an AI quality gate to filter and publish only the best photos to a curated gallery, with admin controls for fine-tuning selection and quality."

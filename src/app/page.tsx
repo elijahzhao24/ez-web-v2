@@ -53,7 +53,7 @@ export default function Home() {
         </motion.section>
       </FadeInSection>
 
-      <FadeInSection delay={0.8}>
+      <FadeInSection delay={0} duration={0.22} animateOnMount={true}>
         <Footer />
       </FadeInSection>
     </main>

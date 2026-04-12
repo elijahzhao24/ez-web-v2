@@ -196,7 +196,7 @@ export default function WorkPage() {
           </div>
         </FadeInSection>
 
-        <FadeInSection delay={introStartDelay + 0.5} duration={0.4}>
+        <FadeInSection delay={0} duration={0.22} animateOnMount={true}>
           <Footer />
         </FadeInSection>
       </section>
