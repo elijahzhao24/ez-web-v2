@@ -239,7 +239,7 @@ export default function ImageCarousel() {
           <h2 className="text-[0.9rem] font-semibold text-white sm:text-[1.0rem]">
             {activeSlide.header}
           </h2>
-          <p className="text-[0.7rem] text-white/90">
+          <p className="text-[0.6rem] sm:text-[0.7rem] text-white/90">
             {activeSlide.description}
           </p>
         </div>
