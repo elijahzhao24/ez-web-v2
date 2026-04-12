@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { TypeAnimation } from "react-type-animation";
 import ContributionGraph from "@/components/contribution_graph";
@@ -11,7 +10,6 @@ import WorkExperienceItem from "@/components/work_experience_item";
 import { FadeInSection } from "@/util/FadeInSection";
 
 export default function WorkPage() {
-  const searchParams = useSearchParams();
   const headingText = "hi, i'm Elijah";
   const typewriterSpeed = 52;
   const typewriterDuration = (headingText.length * typewriterSpeed) / 1000;
@@ -19,6 +17,7 @@ export default function WorkPage() {
   const projectsDelay = introStartDelay + 0.22;
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
     if (searchParams.get("scroll") !== "projects") {
       return;
     }
@@ -32,7 +31,7 @@ export default function WorkPage() {
     }, 500);
 
     return () => window.clearTimeout(timer);
-  }, [searchParams]);
+  }, []);
 
   const workItems = [
     {
