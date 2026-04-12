@@ -49,7 +49,7 @@ const SLIDES: Slide[] = [
     id: 5,
     image: eating,
     header: "Eating 🍖",
-    description: "gluttonous and big backing.",
+    description: "gluttonous big backing",
   },
 ];
 
