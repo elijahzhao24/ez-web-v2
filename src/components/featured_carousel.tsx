@@ -2,35 +2,85 @@
 
 import { motion } from "framer-motion";
 import Image, { type StaticImageData } from "next/image";
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import tempImage from "@/app/temp.jpg";
-import tempImage2 from "@/app/temp2.png";
+import bizbot from "@/app/images/projects/bizbotprofile.png";
+import bucsFighter from "@/app/images/projects/bucsFighter.webp";
+import datasetProject from "@/app/images/projects/dataset_project.png";
+import kickfund from "@/app/images/projects/kickfund.webp";
+import nbasalary from "@/app/images/projects/nbasalary.webp";
+import blueprintMatchingQuiz from "@/app/images/projects/project-blueprint.webp";
+import suits from "@/app/images/suits.webp";
 
 type Featured = {
-  id: number;
-  image: StaticImageData;
-  description: string;
+  slug: string;
   link: string;
+  title: string;
+  note: string;
+  image: StaticImageData;
 };
 
 type FeaturedCarouselProps = {
   visibleCount?: number;
 };
 
+const FEATURED_ITEMS: Featured[] = [
+  {
+    slug: "blogs",
+    link: "/about",
+    title: "blogs",
+    note: "Blogs coming soon",
+    image: suits,
+  },
+  {
+    slug: "bizbot",
+    link: "/project/bizbot",
+    title: "BizBot",
+    note: "BizBot, an autonomous event photography robot",
+    image: bizbot,
+  },
+  {
+    slug: "dataset-curation-pipeline",
+    link: "/project/dataset-curation-pipeline",
+    title: "Dataset Curation Pipeline",
+    note: "Process millions of noisy images into datasets.",
+    image: datasetProject,
+  },
+  {
+    slug: "kickfund",
+    link: "/project/kickfund",
+    title: "KickFund",
+    note: "Investment market judging system for UBC KickStart.",
+    image: kickfund,
+  },
+  {
+    slug: "bucs-fighter",
+    link: "/project/bucs-fighter",
+    title: "BUCS Fighter",
+    note: "Super smash bros but with BUCS characters.",
+    image: bucsFighter,
+  },
+  {
+    slug: "blueprint-matching-quiz",
+    link: "/project/blueprint-matching-quiz",
+    title: "Blueprint Matching Quiz",
+    note: "Matching 200 students with networking delegates.",
+    image: blueprintMatchingQuiz,
+  },
+  {
+    slug: "nbasalary",
+    link: "/project/nbasalary",
+    title: "NBA Salary",
+    note: "Interactive salary cap visualizer for all NBA teams",
+    image: nbasalary,
+  },
+];
+
 export default function FeaturedCarousel({
   visibleCount = 4,
 }: FeaturedCarouselProps) {
-  const featuredItems = useMemo<Featured[]>(
-    () =>
-      Array.from({ length: 6 }, (_, i) => ({
-        id: i + 1,
-        image: i % 2 === 0 ? tempImage : tempImage2,
-        description: `description ${i + 1}`,
-        link: "/contact",
-      })),
-    [],
-  );
+  const featuredItems = useMemo<Featured[]>(() => FEATURED_ITEMS, []);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemWidth, setItemWidth] = useState(0);
@@ -58,8 +108,8 @@ export default function FeaturedCarousel({
   }, []);
 
   const nextFeatured = () => {
-    if (currentIndex < featuredItems.length - visibleCount) {
-      setCurrentIndex((prev) => Math.min(prev + 1, featuredItems.length - 1));
+    if (currentIndex < maxIndex) {
+      setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
     }
   };
 
@@ -92,23 +142,23 @@ export default function FeaturedCarousel({
             transition={{ duration: 0.2, ease: "easeInOut" }}
           >
             {featuredItems.map((featured, index) => (
-              <a
+              <Link
                 ref={index === 0 ? itemRef : null}
-                key={featured.id}
+                key={featured.slug}
                 href={featured.link}
                 className="group relative aspect-video w-[calc((100%-2.25rem)/4)] flex-none overflow-hidden rounded-lg transition-all duration-300"
               >
                 <Image
                   src={featured.image}
-                  alt={featured.description}
+                  alt={featured.title}
                   className="h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
-                  <p className="px-2 text-center text-xs font-medium text-white">
-                    {featured.description}
+                  <p className="px-2 text-center text-[0.65rem] font-medium text-white">
+                    {featured.note}
                   </p>
                 </div>
-              </a>
+              </Link>
             ))}
           </motion.div>
         </div>

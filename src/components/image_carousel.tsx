@@ -2,12 +2,10 @@
 
 import Image, { type StaticImageData } from "next/image";
 import { useEffect, useState } from "react";
-
-import tempImage from "@/app/temp.jpg";
-import biztech from "@/app/images/biztech2.jpg";
-import nexera from "@/app/images/nexera.webp";
 import hackathons from "@/app/images/bizbotwin.jpg";
-import suits from "@/app/images/suits.webp";
+import biztech from "@/app/images/biztech2.jpg";
+import eating from "@/app/images/eating.webp";
+import nexera from "@/app/images/nexera.webp";
 import ski from "@/app/images/ski.webp";
 
 type Slide = {
@@ -25,26 +23,33 @@ const SLIDES: Slide[] = [
   {
     id: 1,
     image: biztech,
-    header: "Development Lead @ UBC Biztech",
+    header: "Development Lead @ UBC BizTech",
     description: "leading development for UBC's largest tech community",
   },
   {
     id: 2,
     image: nexera,
-    header: "SWE @ Nexera Robotics",
+    header: "SWE @ Nexera Robotics 🤖",
     description: "developing universal grasping solutions for all robots",
   },
   {
     id: 3,
     image: hackathons,
-    header: "Hackathons and Competitions",
-    description: 'building and organizing hackathons; Recently won at NwHacks',
+    header: "Hackathons and Competitions 🚀",
+    description: "building and organizing hackathons; recently won at nwHacks",
   },
   {
     id: 4,
     image: ski,
     header: "Touching Grass 🌲",
-    description: "doing random things; right now thats skiing, golf, and reading",
+    description:
+      "doing random things; right now that's skiing, golf, and reading",
+  },
+  {
+    id: 5,
+    image: eating,
+    header: "Eating 🍖",
+    description: "gluttonous and big backing.",
   },
 ];
 
@@ -234,7 +239,7 @@ export default function ImageCarousel() {
           <h2 className="text-[0.9rem] font-semibold text-white sm:text-[1.0rem]">
             {activeSlide.header}
           </h2>
-          <p className="text-[0.7rem] text-white/90 m:text-[0.9rem]">
+          <p className="text-[0.7rem] text-white/90">
             {activeSlide.description}
           </p>
         </div>
