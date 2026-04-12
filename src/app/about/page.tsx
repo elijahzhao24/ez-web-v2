@@ -8,8 +8,7 @@ export default function AboutPage() {
             About page
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-muted">
-            Placeholder App Router page for your about content. Replace this
-            section with your intro, bio, or story when you are ready.
+            Still a work in progress. Coming Soon.
           </p>
         </div>
       </section>

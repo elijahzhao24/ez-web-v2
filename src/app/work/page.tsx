@@ -29,7 +29,7 @@ export default function WorkPage() {
         block: "start",
       });
       window.history.replaceState(null, "", "/work");
-    }, 800);
+    }, 500);
 
     return () => window.clearTimeout(timer);
   }, [searchParams]);
@@ -186,7 +186,11 @@ export default function WorkPage() {
           </div>
         </FadeInSection>
 
-        <FadeInSection delay={projectsDelay} duration={0.32}>
+        <FadeInSection
+          delay={projectsDelay}
+          duration={0.32}
+          animateOnMount={true}
+        >
           <div>
             <ProjectsSection />
           </div>

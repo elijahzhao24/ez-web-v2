@@ -9,6 +9,7 @@ interface FadeInSectionProps {
   duration?: number;
   once?: boolean;
   amount?: number;
+  animateOnMount?: boolean;
 }
 
 export const FadeInSection = ({
@@ -17,12 +18,16 @@ export const FadeInSection = ({
   duration = 1,
   once = true,
   amount = 0.2,
+  animateOnMount = false,
 }: FadeInSectionProps) => {
+  const animationTarget = { opacity: 1, y: 0 };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once, amount }}
+      {...(animateOnMount
+        ? { animate: animationTarget }
+        : { whileInView: animationTarget, viewport: { once, amount } })}
       transition={{ duration, delay }}
     >
       {children}

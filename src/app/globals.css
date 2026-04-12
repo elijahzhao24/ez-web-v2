@@ -18,11 +18,11 @@
   --nav-bubble: #222222;
   --nav-text: #9ca3af;
   --nav-text-hover: #f9fafb;
-  --highlight-color: #f2c744;
-  --highlight-shadow-1: rgba(250, 198, 52, 0.62);
-  --highlight-shadow-2: rgba(250, 198, 52, 0.42);
-  --highlight-shadow-3: rgba(250, 198, 52, 0.24);
-  --highlight-filter: rgba(250, 198, 52, 0.46);
+  --highlight-color: #74a662;
+  --highlight-shadow-1: rgba(116, 166, 98, 0.55);
+  --highlight-shadow-2: rgba(116, 166, 98, 0.35);
+  --highlight-shadow-3: rgba(116, 166, 98, 0.2);
+  --highlight-filter: rgba(116, 166, 98, 0.38);
 }
 
 @theme inline {
@@ -160,6 +160,11 @@ html.dark {
   .highlight {
     color: var(--highlight-color);
     font-weight: 700;
+    text-shadow: 0 0 4px var(--highlight-shadow-3);
+    filter: drop-shadow(0 0 2px var(--highlight-filter));
+  }
+
+  html.dark .highlight {
     text-shadow:
       0 0 6px var(--highlight-shadow-1),
       0 0 14px var(--highlight-shadow-2),

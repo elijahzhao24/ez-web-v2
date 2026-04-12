@@ -38,7 +38,7 @@ const SLIDES: Slide[] = [
     id: 3,
     image: hackathons,
     header: "Hackathons and Competitions",
-    description: 'building and organizing hackathons, recent win at NwHacks',
+    description: 'building and organizing hackathons; Recently won at NwHacks',
   },
   {
     id: 4,

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import bizbot from "@/app/images/projects/bizbot.png";
 import bucsFighter from "@/app/images/projects/bucsFighter.webp";
+import datasetProject from "@/app/images/projects/dataset_project.png";
 import kickfund from "@/app/images/projects/kickfund.webp";
 import lecruiter from "@/app/images/projects/lecruiter.webp";
 import nbasalary from "@/app/images/projects/nbasalary.webp";
@@ -77,6 +78,14 @@ const PROJECTS: ProjectItem[] = [
     title: "Blueprint Matching Quiz",
     note: "Matching 200 students with networking delegates using cosine similarity algorithms.",
     image: blueprintMatchingQuiz,
+    featured: true,
+    hackathon: false,
+  },
+  {
+    slug: "dataset-curation-pipeline",
+    title: "Dataset Curation Pipeline",
+    note: "Scalable dataset curation with dedupe, diversity sampling, and semantic retrieval.",
+    image: datasetProject,
     featured: true,
     hackathon: false,
   },

@@ -23,7 +23,7 @@ export default function Navbar() {
       <nav className="container-width py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
-            <Image src="/favicon.ico" alt="Elijah Zhao" width={32} height={32} />
+            <Image src="/profile.png" alt="Elijah Zhao" width={32} height={32} />
           </Link>
 
           <div className="flex items-center space-x-1">
