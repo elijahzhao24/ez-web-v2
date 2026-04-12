@@ -11,6 +11,7 @@ import datasetProject from "@/app/images/projects/dataset_project.png";
 import kickfund from "@/app/images/projects/kickfund.webp";
 import lecruiter from "@/app/images/projects/lecruiter.webp";
 import nbasalary from "@/app/images/projects/nbasalary.webp";
+import oldPortfolio from "@/app/images/projects/oldportolio.webp";
 import blueprintMatchingQuiz from "@/app/images/projects/project-blueprint.webp";
 import pvzClone from "@/app/images/projects/pvzclone.webp";
 import rememberMe from "@/app/images/projects/remeberMe.webp";
@@ -117,6 +118,15 @@ const PROJECTS: ProjectItem[] = [
     title: "Plants Vs. Zombies Clone",
     note: "Gameplay clone with a story mode and endless mode.",
     image: pvzClone,
+    featured: false,
+    hackathon: false,
+    production: true,
+  },
+  {
+    slug: "old-portfolio",
+    title: "Old Portfolio",
+    note: "old website keep up for legacy.",
+    image: oldPortfolio,
     featured: false,
     hackathon: false,
     production: true,

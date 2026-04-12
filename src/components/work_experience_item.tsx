@@ -74,11 +74,11 @@ export default function WorkExperienceItem({
                 className="overflow-hidden"
               >
                 <div className="pl-3.5 sm:pl-5">
-                  <div className="space-y-1">
+                  <div className="space-y-2">
                     {details.map((line) => (
                       <p
                         key={line}
-                        className="text-[0.92rem] leading-relaxed text-muted/90"
+                        className="text-[0.92rem] leading-[1.35] text-muted/90"
                       >
                         {line}
                       </p>

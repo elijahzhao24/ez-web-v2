@@ -42,6 +42,7 @@ export default function WorkPage() {
       href: "https://www.nexera-robotics.com/",
       details: [
         "Developing robotic grasping solutions that enable robots to reliably handle diverse, unstructured, and delicate objects.",
+        "Computer vision, data processing, and RAG. Also worked with high-performance optimization across C++, Python, and Ray Core architectures.",
       ],
       accentCompany: true,
       showCursorBadge: true,
