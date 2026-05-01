@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 import ProjectHeaderVideo from "../project_header_video";
-import networkRecommender from "./blueprint-project-header.webp";
-
 import highLevelDiagram from "./high_level.webp";
+import networkHighLevelDiagram from "./network_highlevel.webp";
 import panelImage from "./panel.webp";
 
 export const metadata: Metadata = {
@@ -144,42 +143,65 @@ export default function BlueprintMatchingQuizPage() {
             </div>
           </div>
 
-            <div className="space-y-2 pt-2">
-              <div className="relative aspect-[16/10] overflow-hidden border border-border/35 bg-surface/10">
-                <Image
-                  src={networkRecommender}
-                  alt="Connection made flow in the NFC companion app"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 640px) 100vw, 70vw"
-                />
-              </div>
-            </div>
-
           <div className="space-y-4">
             <span className="project-section-header">Technical</span>
+
+            <div className="project-bold-header">NFC card system</div>
             <div className="project-body-text space-y-3">
               <p>
-                Quick rundown: Next.js powered the companion web app and kiosk
-                surfaces, Lambda APIs handled profile/interaction/quiz logic,
-                DynamoDB stored attendee and connection state, and Algolia +
-                embedding retrieval powered recommendation quality. Around that
-                core, we added monitoring and analytics hooks so event-day
-                traffic stayed fast, observable, and reliable.
+                High-level flow: executive tools write or map a card to a
+                profile ID, attendees tap at kiosks or profiles, and each tap
+                resolves through APIs that read/write profile + interaction
+                state in near real time.
+              </p>
+              <p>
+                Tech stack: Next.js companion + kiosk interfaces, AWS Lambda
+                endpoints for card/profile operations, DynamoDB for profile and
+                interaction persistence, with analytics/monitoring hooks for
+                event-day reliability.
               </p>
             </div>
             <div className="space-y-2 pt-2">
-              <div className="relative aspect-[16/10] overflow-hidden border border-border/35 bg-surface/10">
+              <div className="w-full overflow-hidden border border-border/35 bg-surface/10">
                 <Image
                   src={highLevelDiagram}
                   alt="High-level architecture diagram for UBC NFC networking cards"
-                  fill
-                  className="object-cover"
+                  className="h-auto w-full"
                   sizes="(max-width: 640px) 100vw, 70vw"
                 />
               </div>
               <p className="text-[0.72rem] text-muted">
                 High-level architecture for the UBC NFC networking cards system
+              </p>
+            </div>
+
+            <div className="project-bold-header">
+              Algolia networking recommender
+            </div>
+            <div className="project-body-text space-y-3">
+              <p>
+                High-level flow: attendee profile and event context are indexed,
+                a top-k candidate set is retrieved on query, and results are
+                ranked to return high-intent matches directly in the companion
+                app.
+              </p>
+              <p>
+                Tech stack: Algolia for fast retrieval/ranking, backend
+                services for indexing + orchestration, and Next.js surfaces to
+                present recommendations with low-latency interactions.
+              </p>
+            </div>
+            <div className="space-y-2 pt-2">
+              <div className="w-full overflow-hidden border border-border/35 bg-surface/10">
+                <Image
+                  src={networkHighLevelDiagram}
+                  alt="High-level architecture diagram for the Algolia networking recommender"
+                  className="h-auto w-full"
+                  sizes="(max-width: 640px) 100vw, 70vw"
+                />
+              </div>
+              <p className="text-[0.72rem] text-muted">
+                High-level architecture for the Algolia networking recommender
               </p>
             </div>
           </div>
