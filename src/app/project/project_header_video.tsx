@@ -1,0 +1,238 @@
+"use client";
+
+import { motion, type Variants } from "framer-motion";
+import Link from "next/link";
+import type { ReactElement } from "react";
+
+interface ProjectHeaderVideoProps {
+  title: string;
+  projectRole?: string;
+  role?: string;
+  year: string;
+  videoSrc: string;
+  videoType?: string;
+  description: string;
+  techStack?: string[];
+  sourceCodeUrl?: string;
+  sourceCodeLabel?: string;
+  websiteUrl?: string;
+  websiteLabel?: string;
+}
+
+const META_ITEMS = [
+  { label: "Title", key: "title" },
+  { label: "Role", key: "role" },
+  { label: "Year", key: "year" },
+] as const;
+
+interface ProjectLink {
+  href: string;
+  label: string;
+  icon: ReactElement;
+}
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.08,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.34, ease: "easeOut" },
+  },
+};
+
+export default function ProjectHeaderVideo({
+  title,
+  projectRole,
+  role,
+  year,
+  videoSrc,
+  videoType = "video/webm",
+  description,
+  techStack,
+  sourceCodeUrl,
+  sourceCodeLabel,
+  websiteUrl,
+  websiteLabel,
+}: ProjectHeaderVideoProps) {
+  const resolvedRole = projectRole ?? role ?? "";
+  const values = { title, role: resolvedRole, year };
+  const links = [
+    sourceCodeUrl
+      ? {
+          href: sourceCodeUrl,
+          label: sourceCodeLabel ?? "View on GitHub",
+          icon: <GithubIcon />,
+        }
+      : null,
+    websiteUrl
+      ? {
+          href: websiteUrl,
+          label: websiteLabel ?? formatWebsiteLabel(websiteUrl),
+          icon: <GlobeIcon />,
+        }
+      : null,
+  ].filter((item): item is ProjectLink => item !== null);
+
+  return (
+    <motion.div
+      className="relative space-y-5 sm:space-y-6"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
+      <motion.div
+        variants={itemVariants}
+        className="absolute top-0 right-0 z-10"
+      >
+        <Link
+          href="/work?scroll=projects"
+          aria-label="Close project and return to work projects"
+          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-foreground/30 bg-background/90 text-foreground shadow-sm backdrop-blur transition-colors hover:bg-foreground hover:text-background"
+        >
+          <CloseIcon />
+        </Link>
+      </motion.div>
+
+      <motion.div
+        variants={itemVariants}
+        className="flex items-start gap-2 pr-12 sm:gap-4"
+      >
+        <div className="flex min-w-0 max-w-[34rem] flex-1 items-start gap-2 sm:gap-8">
+          {META_ITEMS.map((item) => (
+            <div key={item.key} className="shrink-0 space-y-0.5">
+              <span className="block text-xs uppercase tracking-[0.32em] text-muted sm:text-[0.6rem]">
+                {item.label}
+              </span>
+              <h2 className="text-[0.76rem] font-normal leading-tight tracking-[0.02em] text-foreground sm:text-[0.9rem]">
+                {values[item.key]}
+              </h2>
+            </div>
+          ))}
+        </div>
+      </motion.div>
+
+      <motion.div
+        variants={itemVariants}
+        className="group relative aspect-[16/10] overflow-hidden border border-border/35 bg-surface/10"
+      >
+        <video
+          className="pointer-events-none touch-none select-none w-full h-full object-cover group-hover:scale-[1.02] transition-all duration-200 ease-out"
+          playsInline
+          autoPlay
+          loop
+          muted
+          disableRemotePlayback
+          controlsList="noplaybackrate nodownload nofullscreen"
+          disablePictureInPicture
+          tabIndex={-1}
+          aria-hidden="true"
+        >
+          <source src={videoSrc} type={videoType} />
+        </video>
+      </motion.div>
+
+      <motion.p
+        variants={itemVariants}
+        className="max-w-[44rem] text-[1.04rem] leading-[1.5] tracking-[-0.01em] text-foreground/95 font-[400] sm:text-[1.1rem]"
+      >
+        {description}
+      </motion.p>
+
+      {techStack && techStack.length > 0 && (
+        <motion.ul
+          variants={itemVariants}
+          className="flex w-full max-w-[44rem] flex-wrap gap-1.5"
+        >
+          {techStack.map((item) => (
+            <li
+              key={item}
+              className="whitespace-nowrap rounded-lg border border-border/70 bg-surface/70 px-2 py-1 text-[0.6rem] leading-tight text-foreground/95"
+            >
+              {item}
+            </li>
+          ))}
+        </motion.ul>
+      )}
+
+      {links.length > 0 && (
+        <motion.div
+          variants={itemVariants}
+          className="flex flex-wrap items-center gap-x-4 gap-y-2"
+        >
+          {links.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-0.5 text-[0.8rem] text-foreground/85 transition-colors hover:text-foreground"
+            >
+              {link.icon}
+              <span>{link.label}</span>
+            </a>
+          ))}
+        </motion.div>
+      )}
+    </motion.div>
+  );
+}
+
+function formatWebsiteLabel(url: string) {
+  try {
+    const { hostname } = new URL(url);
+    return hostname.replace(/^www\./, "");
+  } catch {
+    return "Visit website";
+  }
+}
+
+function GithubIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-[0.9rem] w-[0.9rem] fill-current"
+    >
+      <path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.18-3.37-1.18-.46-1.15-1.1-1.45-1.1-1.45-.9-.6.07-.59.07-.59 1 .08 1.53 1.03 1.53 1.03.88 1.52 2.31 1.08 2.87.82.09-.64.35-1.08.63-1.33-2.23-.25-4.57-1.12-4.57-4.95 0-1.1.39-2 1.03-2.72-.1-.25-.45-1.27.1-2.65 0 0 .85-.27 2.78 1.03A9.66 9.66 0 0 1 12 6.8c.85 0 1.7.11 2.5.33 1.93-1.3 2.78-1.03 2.78-1.03.55 1.38.2 2.4.1 2.65.65.72 1.04 1.63 1.04 2.72 0 3.84-2.34 4.7-4.58 4.95.36.31.68.92.68 1.86v2.23c0 .27.18.58.69.48A10 10 0 0 0 12 2Z" />
+    </svg>
+  );
+}
+
+function GlobeIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-[0.9rem] w-[0.9rem] fill-none stroke-current"
+      strokeWidth="1.8"
+    >
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18M12 3a13 13 0 0 1 0 18M12 3a13 13 0 0 0 0 18" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-3.5 w-3.5 stroke-current"
+      strokeWidth="2.1"
+      fill="none"
+    >
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  );
+}
