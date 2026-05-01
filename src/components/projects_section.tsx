@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import Image, { type StaticImageData } from "next/image";
+import type { StaticImageData } from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import bizbot from "@/app/images/projects/bizbotprofile.png";
@@ -15,6 +15,7 @@ import oldPortfolio from "@/app/images/projects/oldportolio.webp";
 import blueprintMatchingQuiz from "@/app/images/projects/project-blueprint.webp";
 import pvzClone from "@/app/images/projects/pvzclone.webp";
 import rememberMe from "@/app/images/projects/remeberMe.webp";
+import ProjectCardMedia from "@/components/project_card_media";
 
 type ProjectFilter = "featured" | "all" | "hackathons" | "production";
 
@@ -22,7 +23,8 @@ interface ProjectItem {
   slug: string;
   title: string;
   note: string;
-  image: StaticImageData;
+  image?: StaticImageData;
+  videoSrc?: string;
   featured: boolean;
   hackathon: boolean;
   production: boolean;
@@ -39,6 +41,16 @@ const PROJECTS: ProjectItem[] = [
     hackathon: true,
     production: false,
     badgeText: "winner 🏆",
+  },
+  {
+    slug: "blueprint-matching-quiz",
+    title: "Blueprint Quiz + NFC cards",
+    note: "Networking quiz recommendations and NFC profile cards for Blueprint attendees.",
+    image: blueprintMatchingQuiz,
+    videoSrc: "/project/blueprint-matching-quiz/blueprint-video.webm",
+    featured: true,
+    hackathon: false,
+    production: true,
   },
   {
     slug: "dataset-curation-pipeline",
@@ -67,15 +79,6 @@ const PROJECTS: ProjectItem[] = [
     hackathon: true,
     production: false,
     badgeText: "winner 🏆",
-  },
-  {
-    slug: "blueprint-matching-quiz",
-    title: "Blueprint Matching Quiz",
-    note: "Matching 200 students with networking delegates using cosine similarity algorithms.",
-    image: blueprintMatchingQuiz,
-    featured: true,
-    hackathon: false,
-    production: true,
   },
   {
     slug: "lecruiterai",
@@ -261,12 +264,10 @@ export default function ProjectsSection() {
               >
                 <article className="space-y-2.5">
                   <div className="relative aspect-[16/10] overflow-hidden bg-surface/10">
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      className="object-cover transition duration-300 group-hover:scale-[1.02] group-hover:brightness-[0.82]"
-                      sizes="(max-width: 640px) 100vw, 50vw"
+                    <ProjectCardMedia
+                      title={project.title}
+                      image={project.image}
+                      videoSrc={project.videoSrc}
                     />
                     {project.badgeText ? (
                       <span className="pointer-events-none absolute right-2 top-2 z-10 rounded-full border border-white/25 bg-black/58 px-2.5 py-1 text-[0.62rem] font-medium leading-none tracking-[0.02em] text-white backdrop-blur-sm">

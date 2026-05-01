@@ -7,9 +7,8 @@ import networkHighLevelDiagram from "./network_highlevel.webp";
 import panelImage from "./panel.webp";
 
 export const metadata: Metadata = {
-  title: "Blueprint Matching Quiz + NFC networking cards | Project",
-  description:
-    "Project overview for Blueprint Matching Quiz + NFC networking cards",
+  title: "Blueprint Quiz + NFC cards | Project",
+  description: "Project overview for Blueprint Quiz + NFC cards",
 };
 
 export default function BlueprintMatchingQuizPage() {
@@ -17,12 +16,19 @@ export default function BlueprintMatchingQuizPage() {
     <main className="flex min-h-screen flex-col bg-background text-foreground nav container-width font-sans">
       <section className="w-full max-w-4xl space-y-8 pt-0 pb-6 font-sans sm:pb-8">
         <ProjectHeaderVideo
-          title="Blueprint Matching Quiz + NFC networking cards"
+          title="Blueprint Quiz + NFC cards"
           projectRole="Software Engineer"
           year="2026"
           videoSrc="/project/blueprint-matching-quiz/blueprint-video.webm"
-          description="Matching 200 students with networking delegates using cosine similarity algorithms. We made it easier to achieve your goals by matching you with the right people. Ingesting registration data and personality traits from an interactive kiosk quiz enabled us to recommend students to networking delegates using cosine similarity algorithms."
-          techStack={["Algolia", "DynamoDB", "AWS Lambda", "Next.js"]}
+          description="For Blueprint, we built two connected networking experiences: an interactive matching quiz that recommends relevant people to meet, and NFC networking cards that let attendees instantly view profiles and keep track of event connections."
+          techStack={[
+            "Algolia",
+            "DynamoDB",
+            "AWS Bedrock",
+            "AWS Lambda",
+            "API Gateway",
+            "Next.js",
+          ]}
           sourceCodeUrl="https://github.com/ubc-biztech/bt-web-v2"
           websiteUrl="https://www.ubcbiztech.com/events/blueprint2026"
           websiteLabel="Find out more"
@@ -59,8 +65,8 @@ export default function BlueprintMatchingQuizPage() {
                 In our research with students and survey respondents, attendees
                 consistently described how difficult it is to navigate the
                 overwhelming atmosphere while having quality conversations.
-                Remembering who they have talked to and where to find them
-                later is a major pain point.
+                Remembering who they have talked to and where to find them later
+                is a major pain point.
               </p>
               <p>
                 How might we reduce the friction of networking and foster more
@@ -127,18 +133,18 @@ export default function BlueprintMatchingQuizPage() {
 
             <div className="project-body-text space-y-3">
               <p>
-                Connections persist between two
-                people throughout the event, defined as everyone who visits your profile and
-                everyone whose profile you have visited. This gave attendees a
-                running list of everyone they met at the event.
+                Connections persist between two people throughout the event,
+                defined as everyone who visits your profile and everyone whose
+                profile you have visited. This gave attendees a running list of
+                everyone they met at the event.
               </p>
             </div>
 
             <div className="project-body-text">
               <p>
-                We also added a Algolia-powered networking
-                recommender in the companion app to help attendees discover
-                high-relevance people to meet next.
+                We also added a Algolia-powered networking recommender in the
+                companion app to help attendees discover high-relevance people
+                to meet next.
               </p>
             </div>
           </div>
@@ -186,9 +192,9 @@ export default function BlueprintMatchingQuizPage() {
                 app.
               </p>
               <p>
-                Tech stack: Algolia for fast retrieval/ranking, backend
-                services for indexing + orchestration, and Next.js surfaces to
-                present recommendations with low-latency interactions.
+                Tech stack: Algolia for fast retrieval/ranking, backend services
+                for indexing + orchestration, and Next.js surfaces to present
+                recommendations with low-latency interactions.
               </p>
             </div>
             <div className="space-y-2 pt-2">
