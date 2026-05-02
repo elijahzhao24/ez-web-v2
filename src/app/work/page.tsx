@@ -36,14 +36,26 @@ export default function WorkPage() {
   const workItems = [
     {
       title: "Software Intern",
+      company: "Hootsuite",
+      date: "Summer 2026",
+      href: "https://www.nexera-robotics.com/",
+      details: [
+        "Nothing yet 🦉"
+        ],
+      accentCompany: true,
+      showCursorBadge: true,
+      cursorBadgeText: "View More",
+    },
+    {
+      title: "Software Intern",
       company: "Nexera Robotics",
-      date: "Winter 2026",
+      date: "Spring 2026",
       href: "https://www.nexera-robotics.com/",
       details: [
         "Developing robotic grasping solutions that enable robots to reliably handle diverse, unstructured, and delicate objects.",
         "Computer vision, data processing, and RAG. Also worked with high-performance optimization across C++, Python, and Ray Core architectures.",
       ],
-      accentCompany: true,
+      accentCompany: false,
       showCursorBadge: true,
       cursorBadgeText: "View More",
     },
