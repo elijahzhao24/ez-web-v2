@@ -38,9 +38,9 @@ export default function WorkPage() {
       title: "Software Intern",
       company: "Hootsuite",
       date: "Summer 2026",
-      href: "https://www.nexera-robotics.com/",
+      href: "https://www.hootsuite.com/",
       details: [
-        "Nothing yet 🦉"
+        "Incoming 🦉"
         ],
       accentCompany: true,
       showCursorBadge: true,
