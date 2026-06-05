@@ -133,6 +133,9 @@ export default function ImageCarousel() {
             alt={slide.header}
             fill
             priority={index === 0}
+            loading={slide.id === 5 ? "eager" : undefined}
+            unoptimized={slide.id === 5}
+            sizes="(max-width: 768px) 100vw, 900px"
             className={`object-cover transition-opacity duration-500 ${
               index === currentIndex ? "opacity-100" : "opacity-0"
             }`}

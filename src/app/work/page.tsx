@@ -36,11 +36,11 @@ export default function WorkPage() {
   const workItems = [
     {
       title: "Software Intern",
-      company: "Hootsuite",
+      company: "Hootsuite 🦉",
       date: "Summer 2026",
       href: "https://www.hootsuite.com/",
       details: [
-        "Incoming 🦉"
+        "Platform + Infrastructure: API ecosystem & MCP's"
         ],
       accentCompany: true,
       showCursorBadge: true,
@@ -80,7 +80,7 @@ export default function WorkPage() {
       date: "Aug 2025-Present ",
       href: "https://www.ubcbiztech.com/",
       details: [
-        "Developing event features that elevate the experience of our 800+ members.",
+        "Developing event features that elevate the experience of our 900+ members.",
         "Built a stock market app and NFC cards before—currently building a robot 🤖.",
       ],
       accentCompany: true,

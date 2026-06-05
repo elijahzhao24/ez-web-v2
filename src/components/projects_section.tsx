@@ -15,6 +15,8 @@ import oldPortfolio from "@/app/images/projects/oldportolio.webp";
 import blueprintMatchingQuiz from "@/app/images/projects/project-blueprint.webp";
 import pvzClone from "@/app/images/projects/pvzclone.webp";
 import rememberMe from "@/app/images/projects/remeberMe.webp";
+import campusExplorer from "@/app/project/campusexplorer/campusexplorer.png";
+import leGenesis from "@/app/project/legenesis/leGenesis.webp";
 import ProjectCardMedia from "@/components/project_card_media";
 
 type ProjectFilter = "featured" | "all" | "hackathons" | "production";
@@ -79,6 +81,24 @@ const PROJECTS: ProjectItem[] = [
     hackathon: true,
     production: false,
     badgeText: "winner 🏆",
+  },
+  {
+    slug: "legenesis",
+    title: "LeGenesis",
+    note: "Cursor for 3D model and mesh generation.",
+    image: leGenesis,
+    featured: false,
+    hackathon: true,
+    production: false,
+  },
+  {
+    slug: "campusexplorer",
+    title: "Campus Explorer",
+    note: "In-depth map and navigation system for UBC campus.",
+    image: campusExplorer,
+    featured: false,
+    hackathon: false,
+    production: false,
   },
   {
     slug: "lecruiterai",
