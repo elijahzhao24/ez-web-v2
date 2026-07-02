@@ -16,6 +16,7 @@ import blueprintMatchingQuiz from "@/app/images/projects/project-blueprint.webp"
 import pvzClone from "@/app/images/projects/pvzclone.webp";
 import rememberMe from "@/app/images/projects/remeberMe.webp";
 import campusExplorer from "@/app/project/campusexplorer/campusexplorer.png";
+import failureCloud from "@/app/project/failure-cloud/failurecloud.png";
 import leGenesis from "@/app/project/legenesis/leGenesis.webp";
 import ProjectCardMedia from "@/components/project_card_media";
 
@@ -64,6 +65,15 @@ const PROJECTS: ProjectItem[] = [
     production: true,
   },
   {
+  slug: "failure-cloud",
+  title: "Failure Cloud",
+  note: "Synthetic robot testing environments.",
+  image: failureCloud,
+  featured: true,
+  hackathon: true,
+  production: false,
+  },
+  {
     slug: "kickfund",
     title: "KickFund",
     note: "Investment market judging system for UBC KickStart",
@@ -82,6 +92,7 @@ const PROJECTS: ProjectItem[] = [
     production: false,
     badgeText: "winner 🏆",
   },
+  
   {
     slug: "legenesis",
     title: "LeGenesis",

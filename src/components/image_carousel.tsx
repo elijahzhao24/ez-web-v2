@@ -60,12 +60,28 @@ export default function ImageCarousel() {
     currentIndex: 0,
     progress: 0,
   });
+  const [loadedSlideIds, setLoadedSlideIds] = useState<Set<number>>(
+    () => new Set(),
+  );
   const [isPausedByUser, setIsPausedByUser] = useState(false);
   const [isTabHidden, setIsTabHidden] = useState(false);
 
   const { currentIndex, progress } = carouselState;
   const shouldPause = isPausedByUser || isTabHidden;
   const activeSlide = slides[currentIndex];
+  const isActiveSlideLoaded = loadedSlideIds.has(activeSlide.id);
+
+  const markSlideAsLoaded = (slideId: number) => {
+    setLoadedSlideIds((prev) => {
+      if (prev.has(slideId)) {
+        return prev;
+      }
+
+      const next = new Set(prev);
+      next.add(slideId);
+      return next;
+    });
+  };
 
   const goToIndex = (index: number | ((currentIndex: number) => number)) => {
     setCarouselState((prev) => {
@@ -97,7 +113,7 @@ export default function ImageCarousel() {
   }, []);
 
   useEffect(() => {
-    if (shouldPause || slides.length <= 1) {
+    if (shouldPause || slides.length <= 1 || !isActiveSlideLoaded) {
       return;
     }
 
@@ -120,7 +136,7 @@ export default function ImageCarousel() {
     }, TICK_MS);
 
     return () => clearInterval(interval);
-  }, [shouldPause, slides.length]);
+  }, [isActiveSlideLoaded, shouldPause, slides.length]);
 
   return (
     <section className="w-full">
@@ -132,10 +148,12 @@ export default function ImageCarousel() {
             src={slide.image}
             alt={slide.header}
             fill
-            priority={index === 0}
-            loading={slide.id === 5 ? "eager" : undefined}
-            unoptimized={slide.id === 5}
+            preload={index === 0}
+            loading="eager"
+            placeholder="blur"
             sizes="(max-width: 768px) 100vw, 900px"
+            onLoad={() => markSlideAsLoaded(slide.id)}
+            onError={() => markSlideAsLoaded(slide.id)}
             className={`object-cover transition-opacity duration-500 ${
               index === currentIndex ? "opacity-100" : "opacity-0"
             }`}

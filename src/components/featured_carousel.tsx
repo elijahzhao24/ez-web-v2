@@ -12,6 +12,7 @@ import kickfund from "@/app/images/projects/kickfund.webp";
 import nbasalary from "@/app/images/projects/nbasalary.webp";
 import blueprintMatchingQuiz from "@/app/images/projects/project-blueprint.webp";
 import suits from "@/app/images/suits.webp";
+import failureCloud from "@/app/project/failure-cloud/failurecloud.png";
 
 type Featured = {
   slug: string;
@@ -39,6 +40,13 @@ const FEATURED_ITEMS: Featured[] = [
     title: "BizBot",
     note: "BizBot, an autonomous event photography robot",
     image: bizbot,
+  },
+  {
+    slug: "failure-cloud",
+    link: "/project/failure-cloud",
+    title: "Failure Cloud",
+    note: "Synthetic robot testing environments.",
+    image: failureCloud,
   },
   {
     slug: "dataset-curation-pipeline",
