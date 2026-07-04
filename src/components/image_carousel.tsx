@@ -142,23 +142,29 @@ export default function ImageCarousel() {
     <section className="w-full">
       <h2 className="text-lg font-semibold">Here's what I've been up to</h2>
       <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-black">
-        {slides.map((slide, index) => (
-          <Image
-            key={slide.id}
-            src={slide.image}
-            alt={slide.header}
-            fill
-            preload={index === 0}
-            loading="eager"
-            placeholder="blur"
-            sizes="(max-width: 768px) 100vw, 900px"
-            onLoad={() => markSlideAsLoaded(slide.id)}
-            onError={() => markSlideAsLoaded(slide.id)}
-            className={`object-cover transition-opacity duration-500 ${
-              index === currentIndex ? "opacity-100" : "opacity-0"
-            }`}
-          />
-        ))}
+        {slides.map((slide, index) => {
+          const isInitialSlide = index === 0;
+          const isActiveSlide = index === currentIndex;
+
+          return (
+            <Image
+              key={slide.id}
+              src={slide.image}
+              alt={slide.header}
+              fill
+              preload={isInitialSlide}
+              loading={isInitialSlide ? "eager" : "lazy"}
+              fetchPriority={isActiveSlide ? "high" : "low"}
+              placeholder="blur"
+              sizes="(max-width: 768px) 100vw, 900px"
+              onLoad={() => markSlideAsLoaded(slide.id)}
+              onError={() => markSlideAsLoaded(slide.id)}
+              className={`object-cover transition-opacity duration-500 ${
+                isActiveSlide ? "opacity-100" : "opacity-0"
+              }`}
+            />
+          );
+        })}
 
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/35" />
 
