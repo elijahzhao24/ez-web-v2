@@ -3,7 +3,7 @@
 import Image, { type StaticImageData } from "next/image";
 import { useEffect, useState } from "react";
 import hackathons from "@/app/images/bizbotwin.jpg";
-import biztech from "@/app/images/biztech2.jpg";
+import biztech from "@/app/images/biztech2.webp";
 import eating from "@/app/images/eating.webp";
 import nexera from "@/app/images/nexera.webp";
 import ski from "@/app/images/ski.webp";
