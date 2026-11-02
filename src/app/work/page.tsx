@@ -40,7 +40,8 @@ export default function WorkPage() {
       date: "Summer 2026",
       href: "https://www.hootsuite.com/",
       details: [
-        "Platform + Infrastructure: API ecosystem & MCP's"
+        "Platform + Infrastructure: API ecosystem & MCP's",
+        "Developed a custom JDBC connector for Hootsuite Analytics, exposing API data as relational tables. Built infrastructure and auth for our new MCP discovery platform."
         ],
       accentCompany: true,
       showCursorBadge: true,

@@ -8,6 +8,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import bizbot from "@/app/images/projects/bizbotprofile.png";
 import bucsFighter from "@/app/images/projects/bucsFighter.webp";
 import datasetProject from "@/app/images/projects/dataset_project.png";
+import humanCraft from "@/app/images/projects/humancraft.png";
 import kickfund from "@/app/images/projects/kickfund.webp";
 import nbasalary from "@/app/images/projects/nbasalary.webp";
 import blueprintMatchingQuiz from "@/app/images/projects/project-blueprint.webp";
@@ -33,6 +34,13 @@ const FEATURED_ITEMS: Featured[] = [
     title: "blogs",
     note: "Blogs coming soon",
     image: suits,
+  },
+  {
+    slug: "humancraft",
+    link: "/project/humancraft",
+    title: "HumanCraft",
+    note: "Bring real people into Minecraft. Hack the North 2026 winner.",
+    image: humanCraft,
   },
   {
     slug: "bizbot",

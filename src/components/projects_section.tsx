@@ -8,8 +8,10 @@ import bizbot from "@/app/images/projects/bizbotprofile.png";
 import bucsFighter from "@/app/images/projects/bucsFighter.webp";
 import connectFour from "@/app/images/projects/connectfour.webp";
 import datasetProject from "@/app/images/projects/dataset_project.png";
+import humanCraft from "@/app/images/projects/humancraft.png";
 import kickfund from "@/app/images/projects/kickfund.webp";
 import lecruiter from "@/app/images/projects/lecruiter.webp";
+import nbaReconstruction from "@/app/images/projects/nba_reconstruction_1.png";
 import nbasalary from "@/app/images/projects/nbasalary.webp";
 import oldPortfolio from "@/app/images/projects/oldportolio.webp";
 import blueprintMatchingQuiz from "@/app/images/projects/project-blueprint.webp";
@@ -35,6 +37,26 @@ interface ProjectItem {
 }
 
 const PROJECTS: ProjectItem[] = [
+  {
+    slug: "humancraft",
+    title: "HumanCraft",
+    note: "Bring real people into Minecraft with iPhone LiDAR.",
+    image: humanCraft,
+    featured: true,
+    hackathon: true,
+    production: false,
+    badgeText: "winner 🏆",
+  },
+  {
+    slug: "nba-3d-scene-reconstruction",
+    title: "NBA 3D Scene Reconstruction",
+    note: "Reconstructing basketball footage with player tracking and 3D pose estimation.",
+    image: nbaReconstruction,
+    featured: true,
+    hackathon: false,
+    production: false,
+    badgeText: "CV and inference study",
+  },
   {
     slug: "bizbot",
     title: "BizBot",
@@ -65,13 +87,13 @@ const PROJECTS: ProjectItem[] = [
     production: true,
   },
   {
-  slug: "failure-cloud",
-  title: "Failure Cloud",
-  note: "Synthetic robot testing environments.",
-  image: failureCloud,
-  featured: true,
-  hackathon: true,
-  production: false,
+    slug: "failure-cloud",
+    title: "Failure Cloud",
+    note: "Synthetic robot testing environments.",
+    image: failureCloud,
+    featured: false,
+    hackathon: true,
+    production: false,
   },
   {
     slug: "kickfund",
@@ -92,7 +114,7 @@ const PROJECTS: ProjectItem[] = [
     production: false,
     badgeText: "winner 🏆",
   },
-  
+
   {
     slug: "legenesis",
     title: "LeGenesis",

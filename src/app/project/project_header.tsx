@@ -109,13 +109,20 @@ export default function ProjectHeader({
         variants={itemVariants}
         className="flex items-start gap-2 pr-12 sm:gap-4"
       >
-        <div className="flex min-w-0 max-w-[34rem] flex-1 items-start gap-2 sm:gap-8">
+        <div className="flex min-w-0 max-w-[34rem] flex-1 flex-wrap items-start gap-2 sm:gap-8">
           {META_ITEMS.map((item) => (
-            <div key={item.key} className="shrink-0 space-y-0.5">
+            <div
+              key={item.key}
+              className={
+                item.key === "title"
+                  ? "min-w-0 space-y-0.5"
+                  : "shrink-0 space-y-0.5"
+              }
+            >
               <span className="block text-xs uppercase tracking-[0.32em] text-muted sm:text-[0.6rem]">
                 {item.label}
               </span>
-              <h2 className="text-[0.76rem] font-normal leading-tight tracking-[0.02em] text-foreground sm:text-[0.9rem]">
+              <h2 className="text-[0.76rem] font-normal leading-tight tracking-[0.02em] text-foreground [overflow-wrap:anywhere] sm:text-[0.9rem]">
                 {values[item.key]}
               </h2>
             </div>
